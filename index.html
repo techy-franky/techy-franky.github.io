@@ -11,28 +11,24 @@
     .subtitle { font-size:1.4rem; margin:15px 0 0; }
     .container { max-width:1000px; margin:40px auto; padding:0 20px; }
 
-/* New About Section */
-.about { background:#161b22; padding:40px; border-radius:12px; border:1px solid #30363d; margin:0 auto 60px; max-width:800px; text-align:center; }
-.about h2 { color:#58a6ff; margin-top:0; }
-.about p { font-size:1.1rem; }
+    /* New About Section */
+    .about { background:#161b22; padding:40px; border-radius:12px; border:1px solid #30363d; margin:0 auto 60px; max-width:800px; text-align:center; }
+    .about h2 { color:#58a6ff; margin-top:0; }
+    .about p { font-size:1.1rem; }
 
-.grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
-.category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:left; }
-.category h2 { margin:0 0 10px 0; color:#58a6ff; text-align:center; }
-.category h3 { margin:20px 0 10px; color:#c9d1d9; }
-.category p { margin:10px 0; }
-.category ol { margin:10px 0; padding-left:20px; }
-.category img { max-width:100%; margin:10px 0; border:1px solid #30363d; border-radius:6px; }
-.coming { color:#8b949e; font-style:italic; text-align:center; }
-footer { text-align:center; padding:60px; opacity:0.6; }
-a { color:#58a6ff; }
-hr { border:0; border-top:1px solid #30363d; margin:20px 0; }  </style></head>
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
+    .category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:center; }
+    .category h2 { margin:0 0 10px 0; color:#58a6ff; }
+    .coming { color:#8b949e; font-style:italic; }
+    footer { text-align:center; padding:60px; opacity:0.6; }
+    a { color:#58a6ff; }
+  </style>
+</head>
 <body>
 
   <header>
     <h1>techy-franky</h1>
-    <p class="subtitle">OWASP Top 10 Hands-On Portfolio
-PortSwigger Web Security Academy</p>
+    <p class="subtitle">OWASP Top 10 Hands-On Portfolio<br>PortSwigger Web Security Academy</p>
   </header>
 
   <!-- ABOUT ME SECTION -->
@@ -40,9 +36,9 @@ PortSwigger Web Security Academy</p>
     <section class="about">
       <h2>Hey, I'm Franky</h2>
       <p>
-        I'm a web application penetration tester with a passion for breaking (and fixing) things.
+        I'm a web application penetration tester with a passion for breaking (and fixing) things.<br><br>
         This portfolio is my public playground where I demonstrate real, hands-on exploitation of every single category in the 
-        <strong>OWASP Top 10 (2021)</strong> — using only the free PortSwigger Web Security Academy labs.
+        <strong>OWASP Top 10 (2021)</strong> — using only the free PortSwigger Web Security Academy labs.<br><br>
         No theory slides. No copied write-ups. Just Burp Suite, payloads, and solved labs — exactly how I would do it on a real pentest.
       </p>
     </section>
@@ -51,35 +47,18 @@ PortSwigger Web Security Academy</p>
   <!-- OWASP CATEGORIES GRID -->
   <div class="container">
     <div class="grid">
-      <div class="category"><h2>A01:2021 - Broken Access Control</h2><p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A02:2021 - Cryptographic Failures</h2><p class="coming">labs coming soon</p></div>
-      <div class="category">
-        <h2>A03:2021 - Injection</h2>
-        <p><strong>Category Explanation:</strong> Injection flaws occur when untrusted data is sent to an interpreter as part of a command or query, allowing attackers to execute unintended commands or access unauthorized data. This is one of the most common and dangerous vulnerabilities, often stemming from poor input validation. Real-world examples include SQL injection (SQLi), NoSQL injection, command injection, and LDAP injection. In pentesting, we exploit these by crafting malicious inputs to manipulate backend queries, potentially leading to data leaks, unauthorized access, or even remote code execution (RCE). Mitigation involves using parameterized queries, escaping inputs, and web application firewalls (WAFs).</p>
-        
-    <h3>Lab Title: SQL Injection Vulnerability Allowing Login Bypass</h3>
-    <p><strong>Description:</strong> This lab simulates a login form vulnerable to SQL injection in the username field, allowing an attacker to bypass authentication without knowing valid credentials. The goal is to log in as the administrator user.</p>
-    <p><strong>Steps to Exploit:</strong></p>
-    <ol>
-      <li>i Navigate to the login page and intercept the POST request using Burp Suite.</li>
-      <li> i Tested the username parameter for SQLi by injecting a single quote (') to trigger an error, confirming sqli vulnerability.</li>
-      <li>i then Crafted a payload to make the SQL query always true: username=administrator'--&password=anything</li>
-      <li>then i Forwarded the modified request to bypass login and access the admin panel.</li>
-    </ol>
-    <p><strong>Payload/Technique:</strong> administrator'-- (comments out the rest of the query, ignoring the password check).</p>
-    <p><strong>Impact:</strong> In a real app, this could lead to unauthorized access to sensitive data, account takeovers, or full system compromise if combined with other vulns.</p>
-    <p><strong>Remediation:</strong> Use parameterized queries or prepared statements in the backend code. Sanitize inputs and implement proper error handling to avoid leaking database info.</p>
-    <p><strong>Screenshots:</strong> <img src="images/sql-injection-intercept.png" alt="Burp intercept of SQLi payload"> <img src="images/sql-injection-success.png" alt="Successful admin login"></p>
-    <hr>
+      <div class="category"><h2>A01</h2>Broken Access Control <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A02</h2>Cryptographic Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A03</h2>Injection <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A04</h2>Insecure Design <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A05</h2>Security Misconfiguration <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A06</h2>Vulnerable & Outdated Components <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A07</h2>Identification & Authentication Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A08</h2>Software & Data Integrity Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A09</h2>Security Logging & Monitoring Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A10</h2>Server-Side Request Forgery (SSRF) <p class="coming">labs coming soon</p></div>
+    </div>
   </div>
-  <div class="category"><h2>A04:2021 - Insecure Design</h2><p class="coming">labs coming soon</p></div>
-  <div class="category"><h2>A05:2021 - Security Misconfiguration</h2><p class="coming">labs coming soon</p></div>
-  <div class="category"><h2>A06:2021 - Vulnerable & Outdated Components</h2><p class="coming">labs coming soon</p></div>
-  <div class="category"><h2>A07:2021 - Identification & Authentication Failures</h2><p class="coming">labs coming soon</p></div>
-  <div class="category"><h2>A08:2021 - Software & Data Integrity Failures</h2><p class="coming">labs coming soon</p></div>
-  <div class="category"><h2>A09:2021 - Security Logging & Monitoring Failures</h2><p class="coming">labs coming soon</p></div>
-  <div class="category"><h2>A10:2021 - Server-Side Request Forgery (SSRF)</h2><p class="coming">labs coming soon</p></div>
-</div>  </div>
 
   <footer>
     <p>© 2025 techy-franky | <a href="https://github.com/techy-franky">GitHub</a></p>
@@ -87,4 +66,3 @@ PortSwigger Web Security Academy</p>
 
 </body>
 </html>
-
