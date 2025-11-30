@@ -10,7 +10,13 @@
     h1 { margin:0; font-size:3.5rem; }
     .subtitle { font-size:1.4rem; margin:15px 0 0; }
     .container { max-width:1000px; margin:40px auto; padding:0 20px; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; margin-top:20px; }
+
+    /* New About Section */
+    .about { background:#161b22; padding:40px; border-radius:12px; border:1px solid #30363d; margin:0 auto 60px; max-width:800px; text-align:center; }
+    .about h2 { color:#58a6ff; margin-top:0; }
+    .about p { font-size:1.1rem; }
+
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
     .category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:center; }
     .category h2 { margin:0 0 10px 0; color:#58a6ff; }
     .coming { color:#8b949e; font-style:italic; }
@@ -21,28 +27,42 @@
 <body>
 
   <header>
-   <h1>techy-franky</h1>
-   <p class="subtitle">OWASP Top 10 Hands-On Portfolio<br>PortSwigger Web Security Academy</p>
- </header>
+    <h1>techy-franky</h1>
+    <p class="subtitle">OWASP Top 10 Hands-On Portfolio<br>PortSwigger Web Security Academy</p>
+  </header>
 
- <div class="container">
-   <div class="grid">
-     <div class="category"><h2>A01</h2>Broken Access Control <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A02</h2>Cryptographic Failures <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A03</h2>Injection <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A04</h2>Insecure Design <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A05</h2>Security Misconfiguration <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A06</h2>Vulnerable & Outdated Components <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A07</h2>Identification & Authentication Failures <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A08</h2>Software & Data Integrity Failures <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A09</h2>Security Logging & Monitoring Failures <p class="coming">labs coming soon</p></div>
-     <div class="category"><h2>A10</h2>Server-Side Request Forgery (SSRF) <p class="coming">labs coming soon</p></div>
-   </div>
- </div>
+  <!-- ABOUT ME SECTION -->
+  <div class="container">
+    <section class="about">
+      <h2>Hey, I'm Franky</h2>
+      <p>
+        I'm a web application penetration tester with a passion for breaking (and fixing) things.<br><br>
+        This portfolio is my public playground where I demonstrate real, hands-on exploitation of every single category in the 
+        <strong>OWASP Top 10 (2021)</strong> — using only the free PortSwigger Web Security Academy labs.<br><br>
+        No theory slides. No copied write-ups. Just Burp Suite, payloads, and solved labs — exactly how I would do it on a real pentest.
+      </p>
+    </section>
+  </div>
 
- <footer>
-   <p>© 2025 techy-franky | <a href="https://github.com/techy-franky">GitHub</a></p>
- </footer>
+  <!-- OWASP CATEGORIES GRID -->
+  <div class="container">
+    <div class="grid">
+      <div class="category"><h2>A01</h2>Broken Access Control <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A02</h2>Cryptographic Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A03</h2>Injection <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A04</h2>Insecure Design <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A05</h2>Security Misconfiguration <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A06</h2>Vulnerable & Outdated Components <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A07</h2>Identification & Authentication Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A08</h2>Software & Data Integrity Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A09</h2>Security Logging & Monitoring Failures <p class="coming">labs coming soon</p></div>
+      <div class="category"><h2>A10</h2>Server-Side Request Forgery (SSRF) <p class="coming">labs coming soon</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 techy-franky | <a href="https://github.com/techy-franky">GitHub</a></p>
+  </footer>
 
 </body>
 </html>
