@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>techy-franky | OWASP Top 10 Portfolio</title>
+  <meta name="description" content="Franky's hands-on cybersecurity portfolio: OWASP Top 10 labs, real-world pentest & bug bounty write-ups, covering web, API, mobile, and cloud security.">
+  <title>techy-franky | Cybersecurity Portfolio</title>
   <style>
     body { margin:0; font-family: Segoe UI, sans-serif; background:#0d1117; color:#c9d1d9; }
     header { background: linear-gradient(135deg, #1f6feb, #c53fe6); color:white; text-align:center; padding:80px 20px; }
@@ -11,24 +12,34 @@
     .subtitle { font-size:1.4rem; margin:15px 0 0; }
     .container { max-width:1000px; margin:40px auto; padding:0 20px; }
 
-    /* New About Section */
+    /* About Section */
     .about { background:#161b22; padding:40px; border-radius:12px; border:1px solid #30363d; margin:0 auto 60px; max-width:800px; text-align:center; }
     .about h2 { color:#58a6ff; margin-top:0; }
-    .about p { font-size:1.1rem; }
+    .about p { font-size:1.1rem; line-height:1.6; }
 
     .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
-    .category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:center; }
+    .category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:center; transition: transform 0.2s; }
+    .category:hover { transform: translateY(-5px); }
+    .category a { text-decoration:none; color:inherit; display:block; }
     .category h2 { margin:0 0 10px 0; color:#58a6ff; }
+    .progress { font-size:0.9rem; color:#8b949e; margin-top:8px; }
     .coming { color:#8b949e; font-style:italic; }
+
     footer { text-align:center; padding:60px; opacity:0.6; }
     a { color:#58a6ff; }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      header { padding:60px 20px; }
+      h1 { font-size:2.8rem; }
+    }
   </style>
 </head>
 <body>
 
   <header>
     <h1>techy-franky</h1>
-    <p class="subtitle">OWASP Top 10 Hands-On Portfolio<br>PortSwigger Web Security Academy</p>
+    <p class="subtitle">Hands-On Cybersecurity Portfolio<br>Web • API • Mobile • Cloud</p>
   </header>
 
   <!-- ABOUT ME SECTION -->
@@ -36,32 +47,63 @@
     <section class="about">
       <h2>Hey, I'm Franky</h2>
       <p>
-        I'm a web application penetration tester with a passion for breaking (and fixing) things.<br><br>
-        This portfolio is my public playground where I demonstrate real, hands-on exploitation of every single category in the 
-        <strong>OWASP Top 10 (2021)</strong> — using only the free PortSwigger Web Security Academy labs.<br><br>
-        No theory slides. No copied write-ups. Just Burp Suite, payloads, and solved labs — exactly how I would do it on a real pentest.
+        I'm a penetration tester passionate about breaking (and securing) modern applications.<br><br>
+        My expertise spans <strong>web applications, APIs (including mobile backends), mobile apps, and cloud environments</strong>. 
+        I find critical vulnerabilities in real-world systems — from authentication bypasses and RCEs to IAM misconfigurations and SSRF chains.<br><br>
+        This portfolio showcases two things:<br>
+        • Hands-on exploitation of the <strong>OWASP Top 10 (2021)</strong> using PortSwigger Web Security Academy labs<br>
+        • Real-world findings from pentests and bug bounties<br><br>
+        No slides. No fluff. Just Burp Suite, Frida, Nuclei, Terraform — and clean, detailed write-ups of how I’d do it on an actual engagement.
       </p>
     </section>
   </div>
 
-  <!-- OWASP CATEGORIES GRID -->
+  <!-- CATEGORIES GRID -->
   <div class="container">
+    <h2 style="text-align:center; color:#58a6ff; margin-bottom:30px;">Portfolio Sections</h2>
     <div class="grid">
-      <div class="category"><h2>A01</h2>Broken Access Control <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A02</h2>Cryptographic Failures <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A03</h2>Injection <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A04</h2>Insecure Design <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A05</h2>Security Misconfiguration <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A06</h2>Vulnerable & Outdated Components <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A07</h2>Identification & Authentication Failures <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A08</h2>Software & Data Integrity Failures <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A09</h2>Security Logging & Monitoring Failures <p class="coming">labs coming soon</p></div>
-      <div class="category"><h2>A10</h2>Server-Side Request Forgery (SSRF) <p class="coming">labs coming soon</p></div>
+
+      <!-- OWASP Top 10 -->
+      <div class="category">
+        <a href="owasp-top10.html">
+          <h2>OWASP Top 10 (2021)</h2>
+          <p>Hands-on labs from PortSwigger Academy</p>
+          <p class="progress">0/14 labs published</p>
+        </a>
+      </div>
+
+      <!-- Real-World -->
+      <div class="category">
+        <a href="real-world.html">
+          <h2>Real-World Findings</h2>
+          <p>Pentest & Bug Bounty Write-ups</p>
+          <p class="progress">Coming soon</p>
+        </a>
+      </div>
+
+      <!-- You can add more sections later, e.g.:
+      <div class="category">
+        <a href="mobile-api.html">
+          <h2>Mobile API Pentesting</h2>
+          <p>DIVA, InsecureBank, Damn Vulnerable iOS App</p>
+          <p class="progress">In progress</p>
+        </a>
+      </div>
+
+      <div class="category">
+        <a href="cloud.html">
+          <h2>Cloud Security</h2>
+          <p>AWS, Azure, GCP misconfigs & attack chains</p>
+          <p class="progress">Coming soon</p>
+        </a>
+      </div>
+      -->
+
     </div>
   </div>
 
   <footer>
-    <p>© 2025 techy-franky | <a href="https://github.com/techy-franky">GitHub</a></p>
+    <p>© 2025 techy-franky | <a href="https://github.com/techy-franky" target="_blank">GitHub</a></p>
   </footer>
 
 </body>
