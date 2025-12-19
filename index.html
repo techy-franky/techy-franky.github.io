@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Franky's hands-on cybersecurity portfolio: OWASP Top 10 labs, real-world pentest & bug bounty write-ups, covering web, API, mobile, and cloud security.">
+  <meta name="description" content="Franky's hands-on cybersecurity portfolio: OWASP Top 10, API/mobile, cloud, smart contracts, and real-world pentest & bug bounty write-ups.">
   <title>techy-franky | Cybersecurity Portfolio</title>
   <style>
     body { margin:0; font-family: Segoe UI, sans-serif; background:#0d1117; color:#c9d1d9; }
@@ -39,7 +39,7 @@
 
   <header>
     <h1>techy-franky</h1>
-    <p class="subtitle">Hands-On Cybersecurity Portfolio<br>Web • API • Mobile • Cloud</p>
+    <p class="subtitle">Hands-On Cybersecurity Portfolio<br>Web • API • Mobile • Cloud • Smart Contracts</p>
   </header>
 
   <!-- ABOUT ME SECTION -->
@@ -47,13 +47,16 @@
     <section class="about">
       <h2>Hey, I'm Franky</h2>
       <p>
-        I'm a penetration tester passionate about breaking (and securing) modern applications.<br><br>
-        My expertise spans <strong>web applications, APIs (including mobile backends), mobile apps, and cloud environments</strong>. 
-        I find critical vulnerabilities in real-world systems — from authentication bypasses and RCEs to IAM misconfigurations and SSRF chains.<br><br>
-        This portfolio showcases two things:<br>
-        • Hands-on exploitation of the <strong>OWASP Top 10 (2021)</strong> using PortSwigger Web Security Academy labs<br>
-        • Real-world findings from pentests and bug bounties<br><br>
-        No slides. No fluff. Just Burp Suite, Frida, Nuclei, Terraform — and clean, detailed write-ups of how I’d do it on an actual engagement.
+        I'm a penetration tester passionate about breaking (and securing) modern applications across the full attack surface.<br><br>
+        My expertise includes <strong>web applications, APIs & mobile backends, mobile apps (Android/iOS), cloud environments (AWS/Azure/GCP), and smart contracts</strong>. 
+        I hunt for everything from auth bypasses and RCE to IAM misconfigs, container escapes, and reentrancy bugs.<br><br>
+        This portfolio showcases hands-on labs and real-world exploits:<br>
+        • OWASP Top 10 via PortSwigger Academy<br>
+        • API/mobile challenges (e.g., VAmPI, DIVA/DVIA)<br>
+        • Cloud misconfigurations (e.g., CloudGoat series)<br>
+        • Smart contract vulnerabilities (e.g., Damn Vulnerable DeFi)<br>
+        • Actual pentest & bug bounty findings<br><br>
+        No theory overload. Just tools like Burp, Frida, Terraform, Foundry — and detailed write-ups from real engagements.
       </p>
     </section>
   </div>
@@ -67,8 +70,35 @@
       <div class="category">
         <a href="owasp-top10.html">
           <h2>OWASP Top 10 (2021)</h2>
-          <p>Hands-on labs from PortSwigger Academy</p>
+          <p>Hands-on labs from PortSwigger Web Security Academy</p>
           <p class="progress">0/14 labs published</p>
+        </a>
+      </div>
+
+      <!-- API & Mobile -->
+      <div class="category">
+        <a href="api-mobile.html">
+          <h2>API & Mobile App Pentesting</h2>
+          <p>Vulnerable APIs (VAmPI) + Mobile apps (DIVA Android, DVIA iOS, InsecureBank)</p>
+          <p class="progress">Coming soon</p>
+        </a>
+      </div>
+
+      <!-- Cloud Security -->
+      <div class="category">
+        <a href="cloud.html">
+          <h2>Cloud Security</h2>
+          <p>Misconfigurations & attacks in AWS/Azure/GCP (CloudGoat, AzureGoat, GCPGoat)</p>
+          <p class="progress">Coming soon</p>
+        </a>
+      </div>
+
+      <!-- Smart Contracts -->
+      <div class="category">
+        <a href="smart-contracts.html">
+          <h2>Smart Contract Auditing</h2>
+          <p>Vulnerable DeFi challenges (Damn Vulnerable DeFi, Ethernaut)</p>
+          <p class="progress">Coming soon</p>
         </a>
       </div>
 
@@ -80,24 +110,6 @@
           <p class="progress">Coming soon</p>
         </a>
       </div>
-
-      <!-- You can add more sections later, e.g.:
-      <div class="category">
-        <a href="mobile-api.html">
-          <h2>Mobile API Pentesting</h2>
-          <p>DIVA, InsecureBank, Damn Vulnerable iOS App</p>
-          <p class="progress">In progress</p>
-        </a>
-      </div>
-
-      <div class="category">
-        <a href="cloud.html">
-          <h2>Cloud Security</h2>
-          <p>AWS, Azure, GCP misconfigs & attack chains</p>
-          <p class="progress">Coming soon</p>
-        </a>
-      </div>
-      -->
 
     </div>
   </div>
