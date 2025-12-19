@@ -6,7 +6,7 @@
   <meta name="description" content="Franky's hands-on cybersecurity portfolio: OWASP Top 10, API/mobile, cloud, smart contracts, and real-world pentest & bug bounty write-ups.">
   <meta property="og:title" content="techy-franky | Cybersecurity Portfolio">
   <meta property="og:description" content="Hands-on pentesting write-ups: OWASP Top 10, API/mobile, cloud, smart contracts, and real bug bounty findings.">
-  <meta property="og:image" content="https://yourdomain.com/og-image.jpg"> <!-- Replace with your actual OG image URL -->
+  <meta property="og:image" content="https://yourdomain.com/og-image.jpg">
   <meta property="og:url" content="https://yourdomain.com">
   <title>techy-franky | Cybersecurity Portfolio</title>
   <style>
@@ -19,25 +19,32 @@
     .social-links a:hover { opacity:1; }
     .container { max-width:1100px; margin:0 auto; padding:0 20px; }
 
-    /* About Section */
     .about { background:#161b22; padding:50px; border-radius:12px; border:1px solid #30363d; margin: -60px auto 80px; max-width:900px; text-align:center; position:relative; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
     .about h2 { color:#58a6ff; margin-top:0; font-size:2.2rem; }
     .about p { font-size:1.15rem; line-height:1.7; }
     .cta { margin-top: 40px; font-size:1.1rem; font-style:italic; }
 
     .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); gap:30px; margin-top:60px; }
-    .category { background:#161b22; padding:40px 30px; border-radius:12px; border:1px solid #30363d; text-align:center; transition: transform 0.3s, box-shadow 0.3s; }
+    .category { 
+      background:#161b22; 
+      padding:40px 30px; 
+      border-radius:12px; 
+      border:1px solid #30363d; 
+      text-align:center; 
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration:none; 
+      color:inherit; 
+      display:block;
+      cursor: pointer;
+    }
     .category:hover { transform: translateY(-10px); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
-    .category a { text-decoration:none; color:inherit; display:block; }
     .category h2 { margin:0 0 15px 0; color:#58a6ff; font-size:1.8rem; }
     .category p { margin:10px 0; }
     .progress { font-size:0.95rem; color:#8b949e; margin-top:12px; }
-    .coming { color:#8b949e; font-style:italic; }
 
     footer { text-align:center; padding:80px 20px; opacity:0.7; font-size:0.95rem; }
     a { color:#58a6ff; }
 
-    /* Mobile tweaks */
     @media (max-width: 768px) {
       header { padding:80px 20px 60px; }
       h1 { font-size:3rem; }
@@ -57,12 +64,10 @@
       <a href="https://linkedin.com/in/your-linkedin" target="_blank">LinkedIn</a> •
       <a href="https://twitter.com/techyfranky" target="_blank">X/Twitter</a> •
       <a href="https://github.com/techy-franky" target="_blank">GitHub</a>
-      <!-- Add more if you have them, e.g., HackerOne/Bugcrowd -->
     </div>
   </header>
 
   <div class="container">
-    <!-- ABOUT ME SECTION -->
     <section class="about">
       <h2>Hey, I'm Franky</h2>
       <p>
@@ -83,54 +88,38 @@
       </p>
     </section>
 
-    <!-- CATEGORIES GRID -->
     <h2 style="text-align:center; color:#58a6ff; margin-bottom:10px;">Portfolio Sections</h2>
     <div class="grid">
 
-      <!-- OWASP Top 10 -->
-      <div class="category">
-        <a href="owasp-top10.html">
-          <h2>OWASP Top 10 (2021)</h2>
-          <p>Hands-on labs from PortSwigger Web Security Academy</p>
-          <p class="progress">4/14 labs published</p> <!-- Update this as you add more -->
-        </a>
-      </div>
+      <a href="owasp-top10.html" class="category">
+        <h2>OWASP Top 10 (2021)</h2>
+        <p>Hands-on labs from PortSwigger Web Security Academy</p>
+        <p class="progress">4/14 labs published</p>
+      </a>
 
-      <!-- API & Mobile -->
-      <div class="category">
-        <a href="api-mobile.html">
-          <h2>API & Mobile App Pentesting</h2>
-          <p>Vulnerable APIs (VAmPI) + Mobile apps (DIVA Android, DVIA iOS, InsecureBank)</p>
-          <p class="progress">First write-ups coming January 2026</p>
-        </a>
-      </div>
+      <a href="api-mobile.html" class="category">
+        <h2>API & Mobile App Pentesting</h2>
+        <p>Vulnerable APIs (VAmPI) + Mobile apps (DIVA Android, DVIA iOS, InsecureBank)</p>
+        <p class="progress">First write-ups coming January 2026</p>
+      </a>
 
-      <!-- Cloud Security -->
-      <div class="category">
-        <a href="cloud.html">
-          <h2>Cloud Security</h2>
-          <p>Misconfigurations & attacks in AWS/Azure/GCP (CloudGoat, AzureGoat, GCPGoat)</p>
-          <p class="progress">In progress</p>
-        </a>
-      </div>
+      <a href="cloud.html" class="category">
+        <h2>Cloud Security</h2>
+        <p>Misconfigurations & attacks in AWS/Azure/GCP (CloudGoat, AzureGoat, GCPGoat)</p>
+        <p class="progress">In progress</p>
+      </a>
 
-      <!-- Smart Contracts -->
-      <div class="category">
-        <a href="smart-contracts.html">
-          <h2>Smart Contract Auditing</h2>
-          <p>Vulnerable DeFi challenges (Damn Vulnerable DeFi, Ethernaut)</p>
-          <p class="progress">Coming soon</p>
-        </a>
-      </div>
+      <a href="smart-contracts.html" class="category">
+        <h2>Smart Contract Auditing</h2>
+        <p>Vulnerable DeFi challenges (Damn Vulnerable DeFi, Ethernaut)</p>
+        <p class="progress">Coming soon</p>
+      </a>
 
-      <!-- Real-World -->
-      <div class="category">
-        <a href="real-world.html">
-          <h2>Real-World Findings</h2>
-          <p>Pentest & Bug Bounty Write-ups (redacted where needed)</p>
-          <p class="progress">Coming soon</p>
-        </a>
-      </div>
+      <a href="real-world.html" class="category">
+        <h2>Real-World Findings</h2>
+        <p>Pentest & Bug Bounty Write-ups (redacted where needed)</p>
+        <p class="progress">Coming soon</p>
+      </a>
 
     </div>
   </div>
