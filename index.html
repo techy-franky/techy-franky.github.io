@@ -3,119 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Franky's hands-on cybersecurity portfolio: OWASP Top 10, API/mobile, cloud, smart contracts, and real-world pentest & bug bounty write-ups.">
-  <title>techy-franky | Cybersecurity Portfolio</title>
+  <meta name="description" content="Franky's hands-on OWASP Top 10 write-ups using PortSwigger Web Security Academy labs. Step-by-step exploits, remediations, and screenshots.">
+  <title>techy-franky | OWASP Top 10 (2021)</title>
   <style>
     body { margin:0; font-family: Segoe UI, sans-serif; background:#0d1117; color:#c9d1d9; }
-    header { background: linear-gradient(135deg, #1f6feb, #c53fe6); color:white; text-align:center; padding:80px 20px; }
-    h1 { margin:0; font-size:3.5rem; }
-    .subtitle { font-size:1.4rem; margin:15px 0 0; }
-    .container { max-width:1000px; margin:40px auto; padding:0 20px; }
-
-    /* About Section */
-    .about { background:#161b22; padding:40px; border-radius:12px; border:1px solid #30363d; margin:0 auto 60px; max-width:800px; text-align:center; }
-    .about h2 { color:#58a6ff; margin-top:0; }
-    .about p { font-size:1.1rem; line-height:1.6; }
-
-    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
-    .category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:center; transition: transform 0.2s; }
-    .category:hover { transform: translateY(-5px); }
-    .category a { text-decoration:none; color:inherit; display:block; }
-    .category h2 { margin:0 0 10px 0; color:#58a6ff; }
-    .progress { font-size:0.9rem; color:#8b949e; margin-top:8px; }
-    .coming { color:#8b949e; font-style:italic; }
-
-    footer { text-align:center; padding:60px; opacity:0.6; }
+    header { background: linear-gradient(135deg, #1f6feb, #c53fe6); color:white; text-align:center; padding:60px 20px; }
+    h1 { margin:0; font-size:3rem; }
+    .subtitle { font-size:1.3rem; margin:15px 0 0; }
+    .container { max-width:900px; margin:40px auto; padding:0 20px; }
+    section { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; margin-bottom:40px; }
+    h2 { color:#58a6ff; margin-top:0; }
+    h3 { color:#79c0ff; margin-bottom:10px; }
+    p { font-size:1rem; line-height:1.6; }
+    ul { list-style-type: disc; padding-left:20px; }
+    .screenshots { background:#0d1117; padding:20px; border:1px dashed #30363d; text-align:center; color:#8b949e; margin-top:20px; }
+    .remediation { margin-top:20px; border-top:1px solid #30363d; padding-top:20px; }
+    footer { text-align:center; padding:40px; opacity:0.6; }
     a { color:#58a6ff; }
-
-    /* Mobile tweaks */
-    @media (max-width: 768px) {
-      header { padding:60px 20px; }
-      h1 { font-size:2.8rem; }
-    }
+    @media (max-width: 768px) { header { padding:40px 20px; } h1 { font-size:2.5rem; } }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>techy-franky</h1>
-    <p class="subtitle">Hands-On Cybersecurity Portfolio<br>Web • API • Mobile • Cloud • Smart Contracts</p>
+    <h1>OWASP Top 10 (2021)</h1>
+    <p class="subtitle">Hands-On Labs from PortSwigger Web Security Academy<br>Real Exploits, No Fluff</p>
   </header>
 
-  <!-- ABOUT ME SECTION -->
   <div class="container">
-    <section class="about">
-      <h2>Hey, I'm Franky</h2>
-      <p>
-        I'm a penetration tester passionate about breaking (and securing) modern applications across the full attack surface.<br><br>
-        My expertise includes <strong>web applications, APIs & mobile backends, mobile apps (Android/iOS), cloud environments (AWS/Azure/GCP), and smart contracts</strong>. 
-        I hunt for everything from auth bypasses and RCE to IAM misconfigs, container escapes, and reentrancy bugs.<br><br>
-        This portfolio showcases hands-on labs and real-world exploits:<br>
-        • OWASP Top 10 via PortSwigger Academy<br>
-        • API/mobile challenges (e.g., VAmPI, DIVA/DVIA)<br>
-        • Cloud misconfigurations (e.g., CloudGoat series)<br>
-        • Smart contract vulnerabilities (e.g., Damn Vulnerable DeFi)<br>
-        • Actual pentest & bug bounty findings<br><br>
-        No theory overload. Just tools like Burp, Frida, Terraform, Foundry — and detailed write-ups from real engagements.
-      </p>
+
+    <!-- A01 -->
+    <section id="a01">
+      <h2>A01: Broken Access Control</h2>
+
+      <h3>Unprotected Admin Functionality</h3>
+      <p>Alright, let's kick this off with a classic. I loaded up the PortSwigger lab for unprotected admin stuff. The site's got some basic pages, but no obvious admin link. So, I checked the robots.txt file – bam, it lists /administrator-panel. Headed there, and sure enough, it's wide open. Logged in as the admin (creds were like administrator:admin or whatever the lab gives), then deleted the user carlos to solve it. Super simple, but shows how forgetting to lock down sensitive pages can bite you.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Browse the site, nothing fancy.</li>
+        <li>Hit /robots.txt – sees /administrator-panel disallowed, but that's a hint.</li>
+        <li>Go to /administrator-panel, it's there unprotected.</li>
+        <li>Find the delete user link for carlos and click it. Lab solved.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>To fix this, always protect admin panels with proper auth checks. Use role-based access control (RBAC), hide them from robots.txt, and maybe obscure the URL a bit. Scan for exposed endpoints regulary.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Burp captures, robots.txt, admin page)</div>
+
+      <h3>URL-Based Access Control Can Be Circumvented</h3>
+      <p>Next up, this one's sneaky. The lab has an /admin page that's blocked for normal users, but it's enforced via the URL. I used Burp to mess with it. Sent the request to Repeater, changed the path to / and added X-Original-URL: /admin. Boom, it loads the admin panel. Then appended ?username=carlos to delete him.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Try /admin – blocked.</li>
+        <li>In Burp Repeater, set path to / and add header X-Original-URL: /admin.</li>
+        <li>Sees admin page.</li>
+        <li>Change X-Original-URL to /admin/delete?username=carlos and send. Done.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Don't rely on front-end or URL-based checks alone. Enforce access control on the back-end server-side. Use secure headers and validate every request's auth regardless of how it's routed.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Burp Repeater tabs, responses)</div>
     </section>
-  </div>
 
-  <!-- CATEGORIES GRID -->
-  <div class="container">
-    <h2 style="text-align:center; color:#58a6ff; margin-bottom:30px;">Portfolio Sections</h2>
-    <div class="grid">
+    <!-- A02 -->
+    <section id="a02">
+      <h2>A02: Cryptographic Failures</h2>
 
-      <!-- OWASP Top 10 -->
-      <div class="category">
-        <a href="owasp-top10.html">
-          <h2>OWASP Top 10 (2021)</h2>
-          <p>Hands-on labs from PortSwigger Web Security Academy</p>
-          <p class="progress">0/14 labs published</p>
-        </a>
+      <h3>JWT Bypass via Flawed Signature</h3>
+      <p>JWTs can be tricky if not handled right. In this lab, I logged in as wiener:peter, grabbed the session cookie which is a JWT. In Burp, decoded it, changed sub to administrator, set alg to none, removed the signature (kept the dot), and sent to /admin. Got access, deleted carlos.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Login as wiener:peter.</li>
+        <li>Intercept /my-account, send to Repeater.</li>
+        <li>Change path to /admin.</li>
+        <li>In Inspector, mod sub to administrator, alg to none, remove signature.</li>
+        <li>Send, access admin, delete carlos via /admin/delete?username=carlos.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Always verify JWT signatures. Reject 'none' alg, use strong keys, and validate all claims server-side. Libraries like jsonwebtoken in Node have options to enforce this.</p>
       </div>
+      <div class="screenshots">Screenshots attachment here (JWT decoding in Burp, modified token)</div>
 
-      <!-- API & Mobile -->
-      <div class="category">
-        <a href="api-mobile.html">
-          <h2>API & Mobile App Pentesting</h2>
-          <p>Vulnerable APIs (VAmPI) + Mobile apps (DIVA Android, DVIA iOS, InsecureBank)</p>
-          <p class="progress">Coming soon</p>
-        </a>
+      <h3>JWT Bypass via Unverified Signature</h3>
+      <p>Similar vibe, but here the server just doesn't check the sig at all. Logged in, changed sub to administrator in the payload, didn't touch the header or sig, resent to /admin, and it worked. Deleted carlos same way.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Login, grab JWT from /my-account.</li>
+        <li>Send to Repeater, change to /admin.</li>
+        <li>Mod payload sub to administrator, apply changes.</li>
+        <li>Send, admin access granted, delete user.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Force signature verification on all JWTs. Configure your JWT lib to always check sigs, use HS256 or RS256 properly, rotate keys.</p>
       </div>
+      <div class="screenshots">Screenshots attachment here (Before/after payload mods)</div>
+    </section>
 
-      <!-- Cloud Security -->
-      <div class="category">
-        <a href="cloud.html">
-          <h2>Cloud Security</h2>
-          <p>Misconfigurations & attacks in AWS/Azure/GCP (CloudGoat, AzureGoat, GCPGoat)</p>
-          <p class="progress">Coming soon</p>
-        </a>
+    <!-- A03 -->
+    <section id="a03">
+      <h2>A03: Injection</h2>
+
+      <h3>SQLi Login Bypass</h3>
+      <p>Old school SQL injection for login. I intercepted the login POST, changed username to administrator'-- , left password blank. It comments out the rest of the query, logs in as admin.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Go to login page.</li>
+        <li>Intercept with Burp.</li>
+        <li>Set username=administrator'--&password=</li>
+        <li>Forward, logged in.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Use prepared statements or parameterized queries. Escape inputs, but better to use ORM like SQLAlchemy. Validate user inputs too.</p>
       </div>
+      <div class="screenshots">Screenshots attachment here (Burp intercept, query)</div>
 
-      <!-- Smart Contracts -->
-      <div class="category">
-        <a href="smart-contracts.html">
-          <h2>Smart Contract Auditing</h2>
-          <p>Vulnerable DeFi challenges (Damn Vulnerable DeFi, Ethernaut)</p>
-          <p class="progress">Coming soon</p>
-        </a>
+      <h3>SQLi (Retrieval of Hidden Data)</h3>
+      <p>For basic SQLi, on a product category page like /filter?category=Gifts, I added ' OR 1=1-- to the query string. Dumps all products.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Browse /filter?category=Gifts</li>
+        <li>Append ' OR 1=1-- to category.</li>
+        <li>Sees all items.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Same as above, parameterized queries. Input validation for expected formats.</p>
       </div>
+      <div class="screenshots">Screenshots attachment here (Before/after injection)</div>
 
-      <!-- Real-World -->
-      <div class="category">
-        <a href="real-world.html">
-          <h2>Real-World Findings</h2>
-          <p>Pentest & Bug Bounty Write-ups</p>
-          <p class="progress">Coming soon</p>
-        </a>
+      <h3>NoSQL Operator Injection to Bypass Authentication</h3>
+      <p>For NoSQL, on login, used username wiener" || 1==1 // or something, but actually for bypass: username={"$ne":null}&password={"$ne":null} to match any.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Login form POST.</li>
+        <li>Set username={"$ne":null}&password={"$ne":null}</li>
+        <li>Bypasses, logs in as admin or first user.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Sanitize inputs for NoSQL operators. Use safe query builders, validate types, avoid direct user input in queries.</p>
       </div>
+      <div class="screenshots">Screenshots attachment here (Payload in Burp)</div>
+    </section>
 
-    </div>
+    <!-- A04 -->
+    <section id="a04">
+      <h2>A04: Insecure Design</h2>
+
+      <h3>2FA Broken Logic</h3>
+      <p>This lab has 2FA, but the verification is flawed. Logged in as wiener, got to 2FA step, but then brute forced the code for carlos by guessing 0000-9999, since it doesn't rate limit properly or something. Actually, the logic allows using your own code for others.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Login as wiener, note 2FA code sent.</li>
+        <li>Intercept 2FA verify, change username to carlos in the request.</li>
+        <li>Use your own code for carlos, bypasses.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Bind 2FA codes to specific sessions/users. Rate limit attempts, use time-based OTPs properly.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Intercept mods)</div>
+
+      <h3>Excessive Trust in Client-Side Controls</h3>
+      <p>In this logic flaw lab, the cart trusts client-side price. Added a jacket, intercepted add to cart, changed price to 1, bought it cheap.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Add expensive item to cart.</li>
+        <li>Intercept POST /cart, change price param to low value.</li>
+        <li>Place order, solved.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Validate prices server-side. Don't trust client inputs for sensitive data like costs. Use server-calculated totals.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Cart intercept)</div>
+    </section>
+
+    <!-- A05 -->
+    <section id="a05">
+      <h2>A05: Security Misconfiguration</h2>
+
+      <h3>CORS Vuln with Basic Origin Reflection</h3>
+      <p>CORS misconfig. Logged in, saw /accountDetails returns API key with ACAO reflecting origin. Crafted exploit JS to fetch it from another domain.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Login, check /accountDetails in Repeater.</li>
+        <li>Add Origin: evil.com, sees reflected.</li>
+        <li>On exploit server, JS to XMLHttpRequest the endpoint with creds, log key.</li>
+        <li>Deliver to victim, grab key.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Set ACAO to specific trusted origins only. Don't reflect, and be careful with null. Use CSRF tokens too.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Exploit JS, logs)</div>
+
+      <h3>CORS Vuln with Trusted Null Origin</h3>
+      <p>Similar, but trusts null origin. Used iframe sandbox to send null origin, fetched data.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Check CORS allows null.</li>
+        <li>Craft exploit with iframe srcdoc sending XHR with null origin.</li>
+        <li>Steal API key same way.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Don't trust null origins. Specify exact domains, validate requests.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Iframe exploit)</div>
+    </section>
+
+    <!-- A06 -->
+    <section id="a06">
+      <h2>A06: Vulnerable & Outdated Components</h2>
+
+      <h3>Exploiting Java Deserialization with Apache Commons</h3>
+      <p>Dangerous deserialization. Session is serialized object. Used ysoserial to generate payload for CommonsCollections4 to rm a file.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Login, see session cookie is serialized Base64.</li>
+        <li>Gen payload with ysoserial: java -jar ysoserial.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64</li>
+        <li>Replace cookie with URL-encoded payload, send.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Avoid deserializing untrusted data. Use JSON instead, or whitelist classes. Update libs to patch known gadget chains.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Ysoserial output, cookie replace)</div>
+    </section>
+
+    <!-- A07 -->
+    <section id="a07">
+      <h2>A07: Identification & Authentication Failures</h2>
+
+      <h3>Username Enumeration via Different Responses</h3>
+      <p>Login gives different errors for valid/invalid users. Used Intruder to enum usernames by response length, then brute password.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Intercept login, send to Intruder.</li>
+        <li>Sniper on username, load user list, attack, spot diff length.</li>
+        <li>Then sniper on password for valid user, find cred.</li>
+        <li>Login.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Use generic error msgs like "Invalid creds". Rate limit logins, add CAPTCHA.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Intruder results)</div>
+    </section>
+
+    <!-- A08 -->
+    <section id="a08">
+      <h2>A08: Software & Data Integrity Failures</h2>
+
+      <h3>Web Cache Poisoning with Unkeyed Header</h3>
+      <p>Cache doesn't key on X-Forwarded-Host. Added that header with evil domain, poisoned cache with JS alert.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Load home, see cache hit.</li>
+        <li>In Repeater, add X-Forwarded-Host: evil.com</li>
+        <li>Response has script src from evil.</li>
+        <li>Wait for cache, victim sees poisoned page.</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Key caches on all relevant headers. Normalize inputs, use Vary header properly.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Poisoned response)</div>
+    </section>
+
+    <!-- A09 -->
+    <section id="a09">
+      <h2>A09: Security Logging & Monitoring Failures</h2>
+      <p>No big deal here, just a note: This one's about not logging enough or monitoring alerts. In real life, I've seen missed brute forces cause breaches. Always log auth attempts, errors, and set up SIEM for alerts.</p>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Implement comprehensive logging (who, what, when), monitor for anomalies, use tools like ELK stack.</p>
+      </div>
+      <div class="screenshots">No screenshots needed</div>
+    </section>
+
+    <!-- A10 -->
+    <section id="a10">
+      <h2>A10: Server-Side Request Forgery (SSRF)</h2>
+
+      <h3>SSRF with Input-Based Filters</h3>
+      <p>Lab has SSRF on stock check, but blacklists 127.0.0.1. Bypassed with 127.1, or @localhost, etc. Hit internal /admin, delete carlos.</p>
+      <p>Steb by steb:</p>
+      <ol>
+        <li>Find stock API POST /product/stock with stockApi param.</li>
+        <li>Set to http://127.0.0.1/admin – blocked.</li>
+        <li>Try http://127.1/admin – works.</li>
+        <li>Then http://127.1/admin/delete?username=carlos</li>
+      </ol>
+      <div class="remediation">
+        <h4>Remediation & Defense</h4>
+        <p>Use whitelists for allowed hosts. Validate URLs fully, avoid user-controlled SSRF endpoints. Firewall internal access.</p>
+      </div>
+      <div class="screenshots">Screenshots attachment here (Bypass payloads)</div>
+    </section>
+
   </div>
 
   <footer>
-    <p>© 2025 techy-franky | <a href="https://github.com/techy-franky" target="_blank">GitHub</a></p>
+    <p>© 2025 techy-franky | <a href="https://github.com/techy-franky" target="_blank">GitHub</a> | <a href="index.html">Back to Home</a></p>
   </footer>
 
 </body>
