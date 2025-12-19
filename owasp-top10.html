@@ -239,6 +239,60 @@
       </div>
     </article>
 
+    <article class="writeup">
+      <h2>A01 Example 2: Broken Access Control - URL-Based Access Control Can Be Circumvented</h2>
+      
+      <div>
+        <span class="tag">Broken Access Control</span>
+        <span class="tag">A01:2021</span>
+        <span class="tag">IDOR</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        Another flavor of Broken Access Control: the app "controls" access via URL parameters, but doesn't enforce it server-side.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger: "Access control vulnerabilities" series, specifically the URL-param manipulation one.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Logged in as wiener, accessed my profile via <code>/my-account?id=wiener</code>.</li>
+        <li>Intercepted in Burp, changed <code>id</code> to "administrator" or "carlos."</li>
+        <li>Request went through—viewed/deleted other users' data.</li>
+        <li>Solved by upgrading or deleting the target.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="url based access control can be circumvented1.png" alt="URL-Based Access Control - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="url based access control can be circumvented2.png" alt="URL-Based Access Control - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="url based access control can be circumvented3.png" alt="URL-Based Access Control - Screenshot 3" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Classic IDOR—unauthorized viewing or modification of others' data, potential account takeover.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Always validate object ownership server-side (e.g., check session user matches resource ID).</li>
+          <li>Use indirect references (like hashed IDs) if possible.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Never trust client-provided IDs or params for access decisions. Server-side enforcement is non-negotiable.
+      </div>
+    </article>
+
   </div>
 
   <footer>
