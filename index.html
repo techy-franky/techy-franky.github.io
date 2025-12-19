@@ -4,34 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Franky's hands-on cybersecurity portfolio: OWASP Top 10, API/mobile, cloud, smart contracts, and real-world pentest & bug bounty write-ups.">
+  <meta property="og:title" content="techy-franky | Cybersecurity Portfolio">
+  <meta property="og:description" content="Hands-on pentesting write-ups: OWASP Top 10, API/mobile, cloud, smart contracts, and real bug bounty findings.">
+  <meta property="og:image" content="https://yourdomain.com/og-image.jpg"> <!-- Replace with your actual OG image URL -->
+  <meta property="og:url" content="https://yourdomain.com">
   <title>techy-franky | Cybersecurity Portfolio</title>
   <style>
     body { margin:0; font-family: Segoe UI, sans-serif; background:#0d1117; color:#c9d1d9; }
-    header { background: linear-gradient(135deg, #1f6feb, #c53fe6); color:white; text-align:center; padding:80px 20px; }
-    h1 { margin:0; font-size:3.5rem; }
-    .subtitle { font-size:1.4rem; margin:15px 0 0; }
-    .container { max-width:1000px; margin:40px auto; padding:0 20px; }
+    header { background: linear-gradient(135deg, #1f6feb, #c53fe6); color:white; text-align:center; padding:100px 20px 80px; }
+    h1 { margin:0; font-size:3.8rem; }
+    .subtitle { font-size:1.5rem; margin:15px 0 25px; }
+    .social-links { margin-top: 20px; }
+    .social-links a { color:white; margin:0 15px; text-decoration:none; font-size:1.1rem; opacity:0.9; transition: opacity 0.2s; }
+    .social-links a:hover { opacity:1; }
+    .container { max-width:1100px; margin:0 auto; padding:0 20px; }
 
     /* About Section */
-    .about { background:#161b22; padding:40px; border-radius:12px; border:1px solid #30363d; margin:0 auto 60px; max-width:800px; text-align:center; }
-    .about h2 { color:#58a6ff; margin-top:0; }
-    .about p { font-size:1.1rem; line-height:1.6; }
+    .about { background:#161b22; padding:50px; border-radius:12px; border:1px solid #30363d; margin: -60px auto 80px; max-width:900px; text-align:center; position:relative; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .about h2 { color:#58a6ff; margin-top:0; font-size:2.2rem; }
+    .about p { font-size:1.15rem; line-height:1.7; }
+    .cta { margin-top: 40px; font-size:1.1rem; font-style:italic; }
 
-    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
-    .category { background:#161b22; padding:30px; border-radius:12px; border:1px solid #30363d; text-align:center; transition: transform 0.2s; }
-    .category:hover { transform: translateY(-5px); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); gap:30px; margin-top:60px; }
+    .category { background:#161b22; padding:40px 30px; border-radius:12px; border:1px solid #30363d; text-align:center; transition: transform 0.3s, box-shadow 0.3s; }
+    .category:hover { transform: translateY(-10px); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
     .category a { text-decoration:none; color:inherit; display:block; }
-    .category h2 { margin:0 0 10px 0; color:#58a6ff; }
-    .progress { font-size:0.9rem; color:#8b949e; margin-top:8px; }
+    .category h2 { margin:0 0 15px 0; color:#58a6ff; font-size:1.8rem; }
+    .category p { margin:10px 0; }
+    .progress { font-size:0.95rem; color:#8b949e; margin-top:12px; }
     .coming { color:#8b949e; font-style:italic; }
 
-    footer { text-align:center; padding:60px; opacity:0.6; }
+    footer { text-align:center; padding:80px 20px; opacity:0.7; font-size:0.95rem; }
     a { color:#58a6ff; }
 
     /* Mobile tweaks */
     @media (max-width: 768px) {
-      header { padding:60px 20px; }
-      h1 { font-size:2.8rem; }
+      header { padding:80px 20px 60px; }
+      h1 { font-size:3rem; }
+      .subtitle { font-size:1.3rem; }
+      .about { margin: -40px 20px 60px; padding:40px 30px; }
+      .grid { gap:20px; margin-top:40px; }
+      .social-links a { display:block; margin:10px 0; }
     }
   </style>
 </head>
@@ -40,15 +53,21 @@
   <header>
     <h1>techy-franky</h1>
     <p class="subtitle">Hands-On Cybersecurity Portfolio<br>Web • API • Mobile • Cloud • Smart Contracts</p>
+    <div class="social-links">
+      <a href="https://linkedin.com/in/your-linkedin" target="_blank">LinkedIn</a> •
+      <a href="https://twitter.com/techyfranky" target="_blank">X/Twitter</a> •
+      <a href="https://github.com/techy-franky" target="_blank">GitHub</a>
+      <!-- Add more if you have them, e.g., HackerOne/Bugcrowd -->
+    </div>
   </header>
 
-  <!-- ABOUT ME SECTION -->
   <div class="container">
+    <!-- ABOUT ME SECTION -->
     <section class="about">
       <h2>Hey, I'm Franky</h2>
       <p>
         I'm a penetration tester passionate about breaking (and securing) modern applications across the full attack surface.<br><br>
-        My expertise includes <strong>web applications, APIs & mobile backends, mobile apps (Android/iOS), cloud environments (AWS/Azure/GCP), and smart contracts</strong>. 
+        My expertise spans <strong>web applications, APIs & mobile backends, mobile apps (Android/iOS), cloud environments (AWS/Azure/GCP), and smart contracts</strong>. 
         I hunt for everything from auth bypasses and RCE to IAM misconfigs, container escapes, and reentrancy bugs.<br><br>
         This portfolio showcases hands-on labs and real-world exploits:<br>
         • OWASP Top 10 via PortSwigger Academy<br>
@@ -58,12 +77,14 @@
         • Actual pentest & bug bounty findings<br><br>
         No theory overload. Just tools like Burp, Frida, Terraform, Foundry — and detailed write-ups from real engagements.
       </p>
+      <p class="cta">
+        Interested in working together or reviewing a write-up? 
+        <a href="mailto:your.email@example.com">Drop me an email</a> or connect on LinkedIn.
+      </p>
     </section>
-  </div>
 
-  <!-- CATEGORIES GRID -->
-  <div class="container">
-    <h2 style="text-align:center; color:#58a6ff; margin-bottom:30px;">Portfolio Sections</h2>
+    <!-- CATEGORIES GRID -->
+    <h2 style="text-align:center; color:#58a6ff; margin-bottom:10px;">Portfolio Sections</h2>
     <div class="grid">
 
       <!-- OWASP Top 10 -->
@@ -71,7 +92,7 @@
         <a href="owasp-top10.html">
           <h2>OWASP Top 10 (2021)</h2>
           <p>Hands-on labs from PortSwigger Web Security Academy</p>
-          <p class="progress">0/14 labs published</p>
+          <p class="progress">4/14 labs published</p> <!-- Update this as you add more -->
         </a>
       </div>
 
@@ -80,7 +101,7 @@
         <a href="api-mobile.html">
           <h2>API & Mobile App Pentesting</h2>
           <p>Vulnerable APIs (VAmPI) + Mobile apps (DIVA Android, DVIA iOS, InsecureBank)</p>
-          <p class="progress">Coming soon</p>
+          <p class="progress">First write-ups coming January 2026</p>
         </a>
       </div>
 
@@ -89,7 +110,7 @@
         <a href="cloud.html">
           <h2>Cloud Security</h2>
           <p>Misconfigurations & attacks in AWS/Azure/GCP (CloudGoat, AzureGoat, GCPGoat)</p>
-          <p class="progress">Coming soon</p>
+          <p class="progress">In progress</p>
         </a>
       </div>
 
@@ -106,7 +127,7 @@
       <div class="category">
         <a href="real-world.html">
           <h2>Real-World Findings</h2>
-          <p>Pentest & Bug Bounty Write-ups</p>
+          <p>Pentest & Bug Bounty Write-ups (redacted where needed)</p>
           <p class="progress">Coming soon</p>
         </a>
       </div>
