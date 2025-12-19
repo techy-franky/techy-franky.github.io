@@ -1,1 +1,244 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OWASP Top 10 Write-ups | techy-franky</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: Segoe UI, sans-serif; 
+      background: #ffffff; 
+      color: #1a1a1a; 
+      line-height: 1.6;
+    }
+    
+    .page-header { 
+      background: linear-gradient(135deg, #1f6feb, #c53fe6); 
+      color: white; 
+      padding: 60px 20px; 
+      text-align: center; 
+    }
+    .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
+    .page-header p { font-size: 1.2rem; opacity: 0.95; }
+    
+    .back-nav { 
+      background: #f6f8fa; 
+      padding: 15px 20px; 
+      border-bottom: 1px solid #d0d7de; 
+    }
+    .back-nav a { 
+      color: #0969da; 
+      text-decoration: none; 
+      font-weight: 600; 
+      transition: color 0.2s;
+    }
+    .back-nav a:hover { color: #0550ae; }
+    .back-nav a::before { content: "← "; margin-right: 5px; }
+    
+    .container { 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      padding: 60px 20px; 
+    }
+    
+    .intro { 
+      background: #f6f8fa; 
+      padding: 30px; 
+      border-radius: 8px; 
+      border-left: 4px solid #1f6feb; 
+      margin-bottom: 50px; 
+    }
+    .intro h2 { color: #1f6feb; margin-bottom: 15px; font-size: 1.8rem; }
+    .intro h3 { color: #0969da; margin: 20px 0 10px; font-size: 1.3rem; }
+    .intro ul { margin-left: 20px; margin-top: 10px; }
+    .intro li { margin: 5px 0; }
+    
+    .writeup { 
+      background: #ffffff; 
+      border: 1px solid #d0d7de; 
+      border-radius: 8px; 
+      padding: 40px; 
+      margin-bottom: 40px;
+    }
+    
+    .writeup h2 { 
+      color: #0969da; 
+      font-size: 2rem; 
+      margin-bottom: 15px; 
+      padding-bottom: 10px;
+      border-bottom: 2px solid #d0d7de;
+    }
+    
+    .writeup h3 { 
+      color: #1f6feb; 
+      font-size: 1.4rem; 
+      margin-top: 30px;
+      margin-bottom: 15px; 
+    }
+    
+    .writeup h4 { 
+      color: #0969da; 
+      font-size: 1.1rem; 
+      margin-top: 20px;
+      margin-bottom: 10px; 
+    }
+    
+    .writeup p { 
+      margin-bottom: 15px; 
+      color: #24292f; 
+    }
+    
+    .writeup ul, .writeup ol { 
+      margin-left: 25px; 
+      margin-bottom: 15px; 
+    }
+    
+    .writeup li { 
+      margin: 8px 0; 
+    }
+    
+    .tag { 
+      display: inline-block; 
+      background: #ddf4ff; 
+      color: #0969da; 
+      padding: 5px 12px; 
+      border-radius: 12px; 
+      font-size: 0.85rem; 
+      margin-right: 8px; 
+      margin-bottom: 15px;
+    }
+    
+    .impact-box { 
+      background: #fff8c5; 
+      border-left: 4px solid #d29922; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+    }
+    
+    .remediation-box { 
+      background: #dafbe1; 
+      border-left: 4px solid #1a7f37; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+    }
+    
+    .key-takeaway { 
+      background: #ddf4ff; 
+      border-left: 4px solid #0969da; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+      font-style: italic;
+    }
+    
+    footer { 
+      background: #f6f8fa; 
+      text-align: center; 
+      padding: 40px 20px; 
+      border-top: 1px solid #d0d7de; 
+      color: #656d76; 
+      margin-top: 80px;
+    }
+    footer a { color: #0969da; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2.2rem; }
+      .page-header { padding: 40px 20px; }
+      .container { padding: 40px 20px; }
+      .writeup { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="back-nav">
+    <a href="index.html">Back to Portfolio</a>
+  </div>
+
+  <header class="page-header">
+    <h1>OWASP Top 10 (2021)</h1>
+    <p>PortSwigger Web Security Academy Labs</p>
+  </header>
+
+  <div class="container">
+    
+    <section class="intro">
+      <h2>What Is the OWASP Framework?</h2>
+      <p>
+        OWASP stands for Open Web Application Security Project—it's this awesome, community-driven nonprofit that's all about making web apps safer. Their "framework" isn't one single thing but a bunch of resources, like the OWASP Top 10, which lists the most critical web risks every few years (updated in 2021). It's got cheat sheets, testing guides, and tools to help devs and pentesters spot and squash vulns. Basically, if you're building or hacking web stuff, OWASP is your go-to bible—free, practical, and crowdsourced from real-world pros.
+      </p>
+      <p>
+        Now, onto those PortSwigger labs. These are hands-on from Burp Suite's Web Security Academy—free, interactive sims of real vulns. I'll map 'em to OWASP Top 10 (A01-A10) and explain casually, like I'm walking you through my own pentest notes. For each, I'll cover the lab gist, how to exploit, impact, and remediation.
+      </p>
+      
+      <h3>Tools Used</h3>
+      <ul>
+        <li>Burp Suite</li>
+        <li>Browser Dev Tools</li>
+        <li>ffuf</li>
+        <li>sqlmap</li>
+        <li>Web Browsers</li>
+      </ul>
+    </section>
+
+    <article class="writeup">
+      <h2>A01: Broken Access Control - Unprotected Admin Functionality</h2>
+      
+      <div>
+        <span class="tag">Broken Access Control</span>
+        <span class="tag">A01:2021</span>
+        <span class="tag">Admin Panel</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        Broken Access Control tops the OWASP list because apps often fail to restrict what authenticated users can do or access. In this lab, an admin panel is completely unprotected—anyone can hit it directly.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "Unprotected admin functionality" lab. The app has a blog with user comments, and a hidden <code>/admin</code> endpoint for managing users.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Proxied the site in Burp Suite and crawled it—noticed <code>robots.txt</code> disallowing <code>/admin</code>.</li>
+        <li>Navigated to <code>/admin</code> as a low-priv user (wiener)—it loaded no problem, no extra auth.</li>
+        <li>Used the panel to delete the target user "carlos."</li>
+        <li>Lab solved instantly.</li>
+      </ul>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Attackers could delete accounts, escalate privileges, or modify sensitive data—leading to full compromise or data loss.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Implement proper RBAC checks on every sensitive endpoint.</li>
+          <li>Avoid relying on obscurity (like hidden paths or robots.txt).</li>
+          <li>Use session-based authorization, not just URL hiding.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Obscurity isn't security. Always hunt for hidden endpoints early in recon—robots.txt is a gift sometimes.
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    <p>© 2025 techy-franky | <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+</body>
+</html>
