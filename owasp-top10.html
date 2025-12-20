@@ -293,6 +293,65 @@
       </div>
     </article>
 
+    <article class="writeup">
+      <h2>A02: Cryptographic Failures - JWT Authentication Bypass via Unverified Signature</h2>
+      
+      <div>
+        <span class="tag">Cryptographic Failures</span>
+        <span class="tag">A02:2021</span>
+        <span class="tag">JWT</span>
+        <span class="tag">Auth Bypass</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        JWTs rely on cryptographic signatures to ensure the token hasn't been tampered with. In this vuln (part of OWASP A02:2021 Cryptographic Failures), the server completely skips verifying the signature—total rookie mistake. You can forge any token you want.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "JWT authentication bypass via unverified signature" lab. The app uses JWTs in the session cookie for auth, with an admin panel locked behind the "administrator" role.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Logged in as <code>wiener:peter</code> to grab a valid session JWT.</li>
+        <li>Proxied traffic in Burp Suite, spotted the session cookie as a JWT in the <code>/my-account</code> request.</li>
+        <li>Used Burp's built-in JWT Inspector (or JWT Editor extension) to decode it.</li>
+        <li>Changed the "sub" claim from "wiener" to "administrator" (no need to touch the signature since it's not checked).</li>
+        <li>Sent the modified token—accessed <code>/admin</code> directly.</li>
+        <li>Hit the <code>/admin/delete?username=carlos</code> endpoint to solve the lab.</li>
+      </ul>
+      <p><em>Optional tools: JWT Editor BApp for fancier handling</em></p>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="jwt authentication bypass.png1" alt="JWT Authentication Bypass - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="jwt authentication bypass.png2" alt="JWT Authentication Bypass - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="jwt authentication bypass.png3" alt="JWT Authentication Bypass - Screenshot 3" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Full auth bypass—attackers can impersonate any user, including admins. Leads to account takeovers, data theft, or total compromise.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Always verify signatures server-side using a proper library (no skipping!).</li>
+          <li>Use strong algorithms like RS256 with secure key management.</li>
+          <li>Validate all claims (sub, exp, etc.) and reject invalid tokens.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Signature verification is the core of JWT security—skipping it is like leaving your front door unlocked. This lab hammered home why you can't trust client-provided tokens blindly.
+      </div>
+    </article>
+
   </div>
 
   <footer>
