@@ -458,3 +458,198 @@
 
       <div class="remediation-box">
         <h4>Remediation</h4>
+        <ul>
+          <li>Always use parameterized/prepared statements—UNION attacks die instantly.</li>
+          <li>Principle of least privilege: App DB user shouldn't have access to unrelated tables.</li>
+          <li>WAF or input filtering as defense-in-depth (but not a silver bullet).</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Column counting and type testing are muscle memory now—start every SQLi with ORDER BY and NULLs. This lab leveled up my data extraction game; dumping arbitrary tables feels like magic when it works. Also, real-world tip: Hashes are often crackable, so grab 'em whenever you can.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A04: Insecure Design - Excessive Trust in Client-Side Controls</h2>
+      
+      <div>
+        <span class="tag">Insecure Design</span>
+        <span class="tag">A04:2021</span>
+        <span class="tag">Client-Side</span>
+        <span class="tag">Price Manipulation</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        Apps sometimes enforce critical logic (pricing, quantities, hidden features) entirely in JavaScript or hidden fields, trusting the browser not to tamper. Spoiler: We always tamper.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "Excessive trust in client-side controls" lab. It's an e-commerce site where premium items have sky-high prices to prevent purchase by normal users.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Added a cheap item to cart, then tried adding the expensive "premium" one—price was like $1337.</li>
+        <li>Intercepted the POST to <code>/cart</code> in Burp.</li>
+        <li>Saw the price was sent as a parameter: <code>"price":133700</code>.</li>
+        <li>Changed it to something affordable like <code>"price":100</code>.</li>
+        <li>Forwarded the request—item added at my price.</li>
+        <li>Proceeded to checkout and "bought" the premium item for peanuts.</li>
+        <li>Lab solved.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="excessive trust client side.png1" alt="Excessive Trust in Client-Side Controls - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="excessive trust client side.png2" alt="Excessive Trust in Client-Side Controls - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Financial fraud heaven—discounts, free premium access, negative pricing exploits, etc. Businesses lose money; integrity of the whole shop crumbles.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Validate and enforce all business logic server-side (prices from DB, not client).</li>
+          <li>Never send sensitive values that clients can modify.</li>
+          <li>Use server-side checks for eligibility, quantities, etc.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Client-side anything is cosmetic only. If it affects money, access, or data, double-check it server-side.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A05: Security Misconfiguration - CORS Vulnerability with Basic Origin Reflection</h2>
+      
+      <div>
+        <span class="tag">Security Misconfiguration</span>
+        <span class="tag">A05:2021</span>
+        <span class="tag">CORS</span>
+        <span class="tag">Origin Reflection</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        CORS (Cross-Origin Resource Sharing) is meant to let servers safely share resources across domains, but misconfigs turn it into a data leak vector. OWASP A05 covers this under Security Misconfiguration. In "basic origin reflection," the server blindly echoes back whatever Origin header you send in the Access-Control-Allow-Origin response—meaning any domain can read sensitive responses if credentials are included.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "CORS vulnerability with basic origin reflection" lab. The app has an authenticated user view (<code>/accountDetails</code>) that returns JSON with an API key. It includes <code>Access-Control-Allow-Credentials: true</code>, so cookies are sent with cross-origin requests.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Logged in as <code>wiener:peter</code>, proxied traffic in Burp Suite, and spotted the GET to <code>/accountDetails</code> fetching my API key. Response had <code>Access-Control-Allow-Credentials: true</code>.</li>
+        <li>In Burp Repeater, added <code>Origin: https://example.com</code> to the request → server reflected it exactly in <code>Access-Control-Allow-Origin: https://example.com</code>. Boom—reflection confirmed.</li>
+        <li>Went to the Exploit Server (built-in in the lab).</li>
+        <li>Pasted a simple JS payload from PortSwigger's hints to steal the victim's data.</li>
+        <li>Clicked "View exploit" to test—saw my own key logged. Then "Deliver exploit to victim" to send to admin.</li>
+        <li>Checked Access log on exploit server → grabbed the admin's API key from the leaked response. Lab solved.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="cors basic origin reflection.png1" alt="CORS Basic Origin Reflection - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="cors basic origin reflection.png2" alt="CORS Basic Origin Reflection - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Attackers trick logged-in users (via phishing/XSS) into visiting a malicious site that steals sensitive data (API keys, session tokens, PII) from the vulnerable app. Since creds are included, it's like handing over the victim's session cross-origin.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Never reflect arbitrary Origins—use a strict allow-list of trusted domains.</li>
+          <li>Avoid <code>Access-Control-Allow-Origin: *</code> when credentials are involved (browsers block it anyway).</li>
+          <li>Validate Origins server-side against expected values.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway
+        :</strong> CORS reflection is sneaky because it looks "dynamic" but is actually wide open. Always test Origin reflection in pentests—add random domains and see if it bounces back. This lab showed how a tiny header misconfig can lead to credential exfil without any injection or XSS.
+</div>
+</article>
+<article class="writeup">
+  <h2>A06: Vulnerable and Outdated Components - Exploiting Java Deserialization with Apache Commons Collections</h2>
+  
+  <div>
+    <span class="tag">Vulnerable Components</span>
+    <span class="tag">A06:2021</span>
+    <span class="tag">Deserialization</span>
+    <span class="tag">RCE</span>
+  </div>
+
+  <h3>Overview</h3>
+  <p>
+    OWASP A06:2021 (Vulnerable and Outdated Components) covers using old libraries with known exploits. Java deserialization is a classic example: when an app deserializes untrusted data (like session cookies) without proper checks, attackers can inject malicious objects that trigger "gadget chains" in libraries like Apache Commons Collections, leading to remote code execution (RCE).
+  </p>
+
+  <h3>Lab Environment</h3>
+  <p>
+    PortSwigger Web Security Academy: "Exploiting Java deserialization with Apache Commons" lab. The app uses a serialization-based session mechanism (cookie stores a serialized Java object) and loads an outdated/vulnerable version of Apache Commons Collections. Goal: Execute a command on the server to delete <code>/home/carlos/morale.txt</code> and solve the lab.
+  </p>
+
+  <h3>Discovery & Exploitation</h3>
+  <ul>
+    <li>Logged in as <code>wiener:peter</code> in the lab app and proxied traffic with Burp Suite.</li>
+    <li>Noticed the session cookie starts with <code>rO0AB...</code> (classic base64-encoded Java serialized object—starts with <code>aced</code> in hex).</li>
+    <li>Confirmed deserialization vuln: The app deserializes this cookie without safe checks.</li>
+    <li>Used ysoserial (the go-to tool for gadget chains): Downloaded <code>ysoserial-all.jar</code>.</li>
+    <li>Generated payload targeting CommonsCollections4 (matches the lab's vulnerable lib).</li>
+    <li>For Java ≤15: <code>java -jar ysoserial-all.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64 -w 0</code></li>
+    <li>Copied the long base64 string output.</li>
+    <li>In Burp Repeater (on any request that sends the session cookie), replaced the original session value with the new malicious one.</li>
+    <li>URL-encoded the entire cookie value (right-click > Convert selection > URL > URL Encode All Characters).</li>
+    <li>Sent the request—server deserialized it, triggered the gadget chain, executed <code>rm /home/carlos/morale.txt</code>. Lab solved (even though you get a deserialization error in response—the command ran!).</li>
+  </ul>
+
+  <h3>Screenshots</h3>
+  <div style="margin: 20px 0;">
+    <img src="java deserialization.png1" alt="Java Deserialization - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+    <img src="java deserialization.png2" alt="Java Deserialization - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+  </div>
+
+  <div class="impact-box">
+    <h4>Impact</h4>
+    <p>
+      Remote code execution on the server—attackers can run arbitrary commands (shell, reverse shell, data exfil, ransomware, etc.). In real apps, this often leads to full server compromise, especially in microservices or legacy Java backends.
+    </p>
+  </div>
+
+  <div class="remediation-box">
+    <h4>Remediation</h4>
+    <ul>
+      <li>Avoid deserializing untrusted data entirely (use JSON/XML instead).</li>
+      <li>If you must: Use look-ahead deserialization (e.g., ObjectInputFilter in Java 9+), allow-lists for classes, or libraries like NotSoSerial.</li>
+      <li>Keep components updated—patch Apache Commons Collections (newer versions block gadget chains) or remove vulnerable ones.</li>
+      <li>Runtime protections: WAF rules for serialized patterns, container isolation.</li>
+    </ul>
+  </div>
+
+  <div class="key-takeaway">
+    <strong>Key Takeaway:</strong> This lab is awesome for showing how "just using a library" can bite you hard. Gadget chains turn innocent deserialization into RCE without writing custom exploits—ysoserial makes it scarily easy. Always hunt for serialized blobs (base64 starting with rO0AB/aced) in cookies, headers, or params.
+  </div>
+</article>
+  </div>
+  <footer>
+    <p>© 2025 techy-franky | <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+</body>
+</html>
+```
