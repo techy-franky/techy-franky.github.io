@@ -1,1 +1,533 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API & Mobile App Pentesting | techy-franky</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: Segoe UI, sans-serif; 
+      background: #ffffff; 
+      color: #1a1a1a; 
+      line-height: 1.6;
+    }
+    
+    .page-header { 
+      background: linear-gradient(135deg, #1f6feb, #c53fe6); 
+      color: white; 
+      padding: 60px 20px; 
+      text-align: center; 
+    }
+    .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
+    .page-header p { font-size: 1.2rem; opacity: 0.95; }
+    
+    .back-nav { 
+      background: #f6f8fa; 
+      padding: 15px 20px; 
+      border-bottom: 1px solid #d0d7de; 
+    }
+    .back-nav a { 
+      color: #0969da; 
+      text-decoration: none; 
+      font-weight: 600; 
+      transition: color 0.2s;
+    }
+    .back-nav a:hover { color: #0550ae; }
+    .back-nav a::before { content: "← "; margin-right: 5px; }
+    
+    .container { 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      padding: 60px 20px; 
+    }
+    
+    .intro { 
+      background: #f6f8fa; 
+      padding: 30px; 
+      border-radius: 8px; 
+      border-left: 4px solid #1f6feb; 
+      margin-bottom: 50px; 
+    }
+    .intro h2 { color: #1f6feb; margin-bottom: 15px; font-size: 1.8rem; }
+    .intro h3 { color: #0969da; margin: 20px 0 10px; font-size: 1.3rem; }
+    .intro p { margin-bottom: 15px; }
+    .intro ul { margin-left: 20px; margin-top: 10px; }
+    .intro li { margin: 8px 0; }
+    .intro strong { color: #0969da; }
+    
+    .overlap-note {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 4px;
+    }
+    .overlap-note h4 {
+      color: #856404;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .overlap-note p {
+      color: #856404;
+      margin-bottom: 10px;
+    }
+    .overlap-note ul {
+      margin-left: 20px;
+      color: #856404;
+    }
+    
+    .writeup { 
+      background: #ffffff; 
+      border: 1px solid #d0d7de; 
+      border-radius: 8px; 
+      padding: 40px; 
+      margin-bottom: 40px;
+    }
+    
+    .writeup h2 { 
+      color: #0969da; 
+      font-size: 2rem; 
+      margin-bottom: 15px; 
+      padding-bottom: 10px;
+      border-bottom: 2px solid #d0d7de;
+    }
+    
+    .writeup h3 { 
+      color: #1f6feb; 
+      font-size: 1.4rem; 
+      margin-top: 30px;
+      margin-bottom: 15px; 
+    }
+    
+    .writeup h4 { 
+      color: #0969da; 
+      font-size: 1.1rem; 
+      margin-top: 20px;
+      margin-bottom: 10px; 
+    }
+    
+    .writeup p { 
+      margin-bottom: 15px; 
+      color: #24292f; 
+    }
+    
+    .writeup ul, .writeup ol { 
+      margin-left: 25px; 
+      margin-bottom: 15px; 
+    }
+    
+    .writeup li { 
+      margin: 8px 0; 
+    }
+    
+    .writeup code {
+      background: #f6f8fa;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+    
+    .writeup pre {
+      background: #f6f8fa;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+      border: 1px solid #d0d7de;
+    }
+    
+    .tag { 
+      display: inline-block; 
+      background: #ddf4ff; 
+      color: #0969da; 
+      padding: 5px 12px; 
+      border-radius: 12px; 
+      font-size: 0.85rem; 
+      margin-right: 8px; 
+      margin-bottom: 15px;
+    }
+    
+    .critical-box { 
+      background: #ffebe9; 
+      border-left: 4px solid #d73a49; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+    }
+    
+    .high-box { 
+      background: #fff8c5; 
+      border-left: 4px solid #d29922; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+    }
+    
+    .impact-box { 
+      background: #fff8c5; 
+      border-left: 4px solid #d29922; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+    }
+    
+    .remediation-box { 
+      background: #dafbe1; 
+      border-left: 4px solid #1a7f37; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+    }
+    
+    .key-takeaway { 
+      background: #ddf4ff; 
+      border-left: 4px solid #0969da; 
+      padding: 15px 20px; 
+      margin: 20px 0; 
+      border-radius: 4px;
+      font-style: italic;
+    }
+    
+    footer { 
+      background: #f6f8fa; 
+      text-align: center; 
+      padding: 40px 20px; 
+      border-top: 1px solid #d0d7de; 
+      color: #656d76; 
+      margin-top: 80px;
+    }
+    footer a { color: #0969da; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2.2rem; }
+      .page-header { padding: 40px 20px; }
+      .container { padding: 40px 20px; }
+      .writeup { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="back-nav">
+    <a href="index.html">Back to Portfolio</a>
+  </div>
+
+  <header class="page-header">
+    <h1>API & Mobile App Pentesting</h1>
+    <p>OWASP API Security Top 10 (2023) & Mobile Application Testing</p>
+  </header>
+
+  <div class="container">
+    
+    <section class="intro">
+      <h2>APIs, Web APIs, and Mobile Apps – Where They Overlap</h2>
+      <p>
+        APIs (Application Programming Interfaces) are the backbone of modern software—they're the middleman that lets different components communicate. Web APIs (REST, GraphQL, SOAP, etc.) are exposed over HTTP/HTTPS and power everything from traditional websites to single-page apps (SPAs) and third-party integrations.
+      </p>
+      <p>
+        Mobile apps almost always depend on backend APIs to function—fetching data, authenticating users, processing payments, you name it. In most cases, mobile clients (using frameworks like Retrofit on Android or Alamofire on iOS) hit the exact same API endpoints that web frontends use. The mobile app is just another UI layer calling the shared backend.
+      </p>
+      <p>
+        <strong>Here's the key overlap:</strong> Modern applications are API-driven at their core. The frontend—whether it's a React web app, an iOS app, or even an IoT device—is essentially a client making HTTP requests to backend APIs. This means vulnerabilities in the API layer don't just affect one platform; they impact web users, mobile users, and any third-party integrations simultaneously.
+      </p>
+      <p>
+        <strong>Why API security deserves its own focus:</strong> While traditional web vulnerabilities (OWASP Top 10 2021/2025) absolutely apply to APIs, APIs introduce unique attack surfaces. Unlike browsers, APIs don't benefit from built-in protections like the Same-Origin Policy or CSRF tokens. They're also more prone to automation abuse—rate limiting failures, mass enumeration, and credential stuffing scale effortlessly against APIs. Add in issues like broken authorization at the object or function level, and you've got a whole category of risks that go beyond classic web vulns.
+      </p>
+      <p>
+        That's why OWASP maintains a dedicated API Security Top 10.
+      </p>
+    </section>
+
+    <div class="overlap-note">
+      <h4>Note on Overlap with Web Security</h4>
+      <p>
+        Some API vulnerabilities directly mirror what I've already covered in the <a href="owasp-top10.html" style="color:#0550ae; font-weight:600;">OWASP Top 10 (Web) section</a>. Rather than repeat the same exploits, I'll reference those write-ups where applicable and focus on API-specific nuances here.
+      </p>
+      <ul>
+        <li><strong>API1 (BOLA/IDOR)</strong> = A01 Broken Access Control (see URL-based access control write-up)</li>
+        <li><strong>API2 (Broken Authentication)</strong> = A07 Auth Failures + A02 Cryptographic Failures (JWT)</li>
+        <li><strong>API3 (Mass Assignment)</strong> = Related to A04 Insecure Design (client-side trust)</li>
+        <li><strong>API7 (SSRF)</strong> = A10 SSRF (same vuln class, different context)</li>
+        <li><strong>API8 (Misconfig)</strong> = A05 Security Misconfiguration (CORS write-up)</li>
+      </ul>
+      <p>
+        <strong>What's different here:</strong> APIs lack browser protections, handle more automation, and often expose business logic directly. The exploitation techniques may be similar, but the attack surface and impact scale differently. For mobile apps specifically, we'll also dive into client-side vulns (insecure storage, SSL pinning bypasses, reverse engineering) that don't apply to web browsers.
+      </p>
+    </div>
+
+    <section class="intro">
+      <h2>OWASP API Security Top 10 (2023 Edition)</h2>
+      <p>
+        The OWASP API Security Top 10 was last updated in 2023 and remains the current standard as of late 2025. It's tailored specifically to API risks that traditional web security frameworks don't fully capture. Here's the breakdown:
+      </p>
+
+      <h3>API1:2023 – Broken Object Level Authorization (BOLA/IDOR)</h3>
+      <p>
+        Users can access or manipulate other users' data by tampering with object IDs in requests. Classic example: changing <code>user_id=123</code> to <code>user_id=456</code> in a GET/PUT/DELETE request.
+      </p>
+
+      <h3>API2:2023 – Broken Authentication</h3>
+      <p>
+        Weak session tokens, flawed OAuth flows, missing MFA, or credential stuffing attacks let attackers impersonate legitimate users.
+      </p>
+
+      <h3>API3:2023 – Broken Object Property Level Authorization</h3>
+      <p>
+        APIs expose too many object fields (excessive data exposure) or allow clients to modify fields they shouldn't (mass assignment). Example: A user updating their profile can also set <code>"isAdmin": true</code> in the same request.
+      </p>
+
+      <h3>API4:2023 – Unrestricted Resource Consumption</h3>
+      <p>
+        No rate limits, pagination, or throttling → attackers trigger DoS via heavy requests, rack up cloud bills, or exhaust server resources (memory, CPU, bandwidth).
+      </p>
+
+      <h3>API5:2023 – Broken Function Level Authorization</h3>
+      <p>
+        Regular users can access admin-only endpoints or escalate privileges due to poor role-based access control (RBAC). Example: A basic user hitting <code>/admin/deleteUser</code> successfully.
+      </p>
+
+      <h3>API6:2023 – Unrestricted Access to Sensitive Business Flows</h3>
+      <p>
+        Automated abuse of business-critical flows without bot detection or CAPTCHA—think ticket scalping, review bombing, coupon farming, or SMS/email flooding.
+      </p>
+
+      <h3>API7:2023 – Server-Side Request Forgery (SSRF)</h3>
+      <p>
+        The API fetches user-supplied URLs without validation → attackers access internal networks, cloud metadata endpoints (AWS IMDS), or pivot to other services.
+      </p>
+
+      <h3>API8:2023 – Security Misconfiguration</h3>
+      <p>
+        Exposed debug modes, overly permissive CORS policies, default credentials, unnecessary HTTP methods (TRACE, OPTIONS abuse), verbose error messages leaking stack traces, or outdated TLS configs.
+      </p>
+
+      <h3>API9:2023 – Improper Inventory Management</h3>
+      <p>
+        Shadow APIs, undocumented endpoints, deprecated/legacy API versions left running, or missing versioning discipline → attackers find and exploit forgotten endpoints with weaker security.
+      </p>
+
+      <h3>API10:2023 – Unsafe Consumption of APIs</h3>
+      <p>
+        Blind trust in third-party or upstream API responses → injection attacks (SQLi via API data), deserialization flaws, or supply-chain compromises when integrating external services without validation.
+      </p>
+    </section>
+
+    <section class="intro" style="margin-top: 60px;">
+      <h2>Mobile Application Hacking</h2>
+      <p>
+        Now we move from API theory to hands-on mobile app exploitation. Mobile apps introduce additional attack surfaces beyond the backend APIs—client-side storage, exported components, weak crypto implementations, and more. Below, I demonstrate real vulnerabilities found in InsecureBankv2, an intentionally vulnerable Android training app.
+      </p>
+
+      <h3>Tools Used</h3>
+      <ul>
+        <li><strong>Genymotion</strong> – Android emulator for running the target app in a controlled environment, easier to root and configure than physical devices</li>
+        <li><strong>JADX-GUI</strong> – Decompiler for reverse engineering Android APKs, viewing source code, and identifying hardcoded secrets or insecure implementations</li>
+        <li><strong>Frida</strong> – Dynamic instrumentation toolkit for runtime manipulation, bypassing SSL pinning, hooking functions, and extracting data from memory</li>
+        <li><strong>Ubuntu Terminal</strong> – Command-line interface for ADB (Android Debug Bridge) commands, scripting exploits, and interacting with the emulator/device</li>
+        <li><strong>Burp Suite</strong> – Intercepting proxy for analyzing HTTP/S traffic between the mobile app and backend API</li>
+      </ul>
+    </section>
+
+    <article class="writeup">
+      <h2>InsecureBankv2 – Security Assessment Report</h2>
+      
+      <div>
+        <span class="tag">Mobile Security</span>
+        <span class="tag">Android</span>
+        <span class="tag">OWASP Mobile Top 10</span>
+        <span class="tag">Static Analysis</span>
+      </div>
+
+      <p><strong>Assessed by:</strong> techy-franky<br>
+      <strong>Date:</strong> December 14, 2025<br>
+      <strong>Target:</strong> InsecureBankv2 Android Application (intentionally vulnerable training app)<br>
+      <strong>Approach:</strong> Static code review + dynamic testing (in progress)</p>
+
+      <h3>Executive Summary</h3>
+      <p>
+        InsecureBankv2 is a deliberately broken Android banking app used for security training. During static analysis alone I already found <strong>18 critical and high-severity issues</strong> that would let an attacker completely own user accounts, steal credentials, perform unauthorized transfers, and harvest financial data from multiple users at once.
+      </p>
+      <p>
+        <strong>Bottom line:</strong> The app is critically insecure. Authentication is basically optional, encryption is security theater, sensitive data is spilled everywhere, and exported components turn the app into an open attack surface.
+      </p>
+      <p>
+        <strong>Risk Level:</strong> CRITICAL – full compromise is trivial<br>
+        <strong>Vulnerabilities identified so far:</strong> 18 (static phase complete)
+      </p>
+
+      <h3>Key Findings</h3>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Plaintext HTTP Everywhere</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-319</strong> | <strong>OWASP Mobile Top 10: M3</strong> – Insecure Communication</p>
+        <p>
+          Login credentials and basically all sensitive data are sent over plain HTTP. No TLS, no nothing.
+        </p>
+        <p><strong>Where:</strong> <code>DoLogin.java</code> (lines 34, 72–73)</p>
+        <pre>String protocol = "http://";
+HttpPost httppost = new HttpPost(protocol + serverip + ":" + serverport + "/login");</pre>
+        <p><strong>What happens in practice:</strong> I proxied the device through Burp (10.0.3.2:8080) and immediately saw usernames + passwords flying in cleartext POST bodies.</p>
+        <p><strong>Real impact:</strong> Anyone on the same Wi-Fi (coffee shop, hotel, corporate guest network) can grab credentials with Wireshark or even tcpdump. Zero effort.</p>
+        <p><strong>Fix:</strong> Switch to HTTPS + certificate pinning. Refuse to talk to HTTP endpoints.</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Hardcoded Developer Backdoor</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-798</strong> | <strong>OWASP Mobile: M2</strong></p>
+        <p>
+          There's a hardcoded "devadmin" username that routes to a separate <code>/devlogin</code> endpoint. Classic backdoor.
+        </p>
+        <p><strong>Where:</strong> <code>DoLogin.java</code> (lines 76–80)</p>
+        <p><strong>Impact:</strong> Anyone who knows (or guesses) "devadmin" potentially bypasses normal auth entirely.</p>
+        <p><strong>Fix:</strong> Remove it. Full stop. No developer backdoors in production builds.</p>
+      </div>
+
+      <div class="high-box">
+        <h4>🟠 HIGH – Passwords Logged in Plaintext</h4>
+        <p><strong>Severity:</strong> High<br>
+        <strong>CWE-532</strong> | <strong>OWASP Mobile: M2</strong></p>
+        <p>Successful logins are dumped straight to Android logs:</p>
+        <pre>Log.d("Successful Login:", ", account=" + username + ":" + password);</pre>
+        <p><strong>Impact:</strong> <code>adb logcat</code> on any debuggable/rooted device shows every credential. Malicious apps with log access can harvest them too.</p>
+        <p><strong>Fix:</strong> Never log passwords. Ever. Strip debug logs in release builds with ProGuard/R8.</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Hardcoded AES Key + Zero IV</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-321 & CWE-329</strong> | <strong>OWASP Mobile: M5 & M2</strong></p>
+        <p>The app "encrypts" remembered passwords with a hardcoded key and all-zero IV.</p>
+        <p><code>CryptoClass.java</code>:</p>
+        <pre>String key = "This is the super secret key 123";
+byte[] ivBytes = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};</pre>
+        <p><strong>Impact:</strong></p>
+        <ul>
+          <li>Key is trivial to extract via decompilation</li>
+          <li>Zero IV makes encryption deterministic → pattern attacks</li>
+          <li>Combined = "encrypted" passwords are effectively plaintext for anyone who can decompile</li>
+        </ul>
+        <p><strong>Fix:</strong> Use Android Keystore, generate per-device/per-user keys, random IVs per encryption, prefer AES-GCM.</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Transaction History Dumped to World-Readable External Storage</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-276</strong> | <strong>OWASP Mobile: M2</strong></p>
+        <p>
+          Full transaction statements (including account numbers, amounts, timestamps) are written as HTML files to external storage with predictable names:<br>
+          <code>/sdcard/Statements_[base64_username].html</code>
+        </p>
+        <p><strong>Impact:</strong> Any app with READ_EXTERNAL_STORAGE can read every user's financial history. No encryption, no access control.</p>
+        <p><strong>Fix:</strong> Store in app-private internal storage only. Encrypt if you must persist. Use random filenames (UUID).</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – IDOR / No Authorization on Fund Transfers</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-639</strong> | <strong>OWASP API: API1</strong></p>
+        <p>
+          The transfer screen lets users freely specify <code>from_acc</code>, <code>to_acc</code>, and <code>amount</code>. No client-side ownership check, and presumably none server-side either.
+        </p>
+        <p><strong>Impact:</strong> Attacker can transfer money from any account to their own by tampering with the request.</p>
+        <p><strong>Exploit chain (already possible):</strong></p>
+        <ol>
+          <li>Launch DoTransfer activity directly (exported)</li>
+          <li>Intercept POST to <code>/dotransfer</code></li>
+          <li>Change <code>from_acc</code> to victim's account, <code>amount</code> to whatever, <code>to_acc</code> to attacker's</li>
+        </ol>
+        <p><strong>Fix:</strong> Server must validate source account belongs to the authenticated user. Never trust client input for authorization decisions.</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Exported BroadcastReceiver Sends Password via SMS</h4>
+        <p><strong>Severity:</strong> Critical (CVSS ~10.0)<br>
+        <strong>CWE-927 + CWE-200</strong></p>
+        <p>
+          Exported <code>MyBroadCastReceiver</code> decrypts the stored password (using hardcoded key) and sends it via SMS to any phone number provided in the intent.
+        </p>
+        <p><strong>Manifest:</strong> <code>android:exported="true"</code></p>
+        <p><strong>Impact:</strong> Any app on the device can trigger this and receive the victim's plaintext password via SMS. Zero user interaction required.</p>
+        <p><strong>PoC:</strong></p>
+        <pre>adb shell am broadcast -a theBroadcast \
+  -n com.android.insecurebankv2/.MyBroadCastReceiver \
+  --es phonenumber "1234567890" \
+  --es newpass "hacked"</pre>
+        <p>Victim's password gets sent to attacker's number.</p>
+        <p><strong>Fix:</strong> Set <code>exported="false"</code>, add permission protection, never send passwords via SMS.</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Exported Activities = Authentication Bypass</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-306</strong></p>
+        <p>
+          <code>DoTransfer</code>, <code>ViewStatement</code>, <code>ChangePassword</code>, <code>PostLogin</code> are all exported. No login required to reach them.
+        </p>
+        <p><strong>Impact:</strong> Launch sensitive screens directly via intent/adb. Combine with other vulns for full takeover.</p>
+        <p><strong>Fix:</strong> <code>android:exported="false"</code> on everything except the entry point. Add session checks in <code>onCreate()</code>.</p>
+      </div>
+
+      <div class="critical-box">
+        <h4>🔴 CRITICAL – Debuggable + Backup Enabled</h4>
+        <p><strong>Severity:</strong> Critical<br>
+        <strong>CWE-489 + CWE-530</strong></p>
+        <p>
+          <code>android:debuggable="true"</code> and <code>android:allowBackup="true"</code> in manifest.
+        </p>
+        <p><strong>Impact:</strong></p>
+        <ul>
+          <li>Attach debugger → inspect/modify runtime (passwords, keys in memory)</li>
+          <li><code>adb backup</code> → extract SharedPreferences → decrypt passwords with hardcoded key</li>
+        </ul>
+        <p><strong>Fix:</strong> Both flags false in release builds.</p>
+      </div>
+
+      <h3>Other Notable Issues (High)</h3>
+      <ul>
+        <li>Excessive dangerous permissions (SEND_SMS, READ_CONTACTS, location, call logs…)</li>
+        <li>Predictable statement filenames → mass harvesting</li>
+        <li>Transaction details logged to console (<code>System.out.println</code>)</li>
+        <li>Weak crypto overall (no KDF, no auth on CBC, bad key size handling)</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="insecurebank plaintext http.png1" alt="InsecureBank Plaintext HTTP - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank hardcoded key.png2" alt="InsecureBank Hardcoded Key - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank password log.png3" alt="InsecureBank Password Log - Screenshot 3" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank external storage.png4" alt="InsecureBank External Storage - Screenshot 4" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank idor transfer.png5" alt="InsecureBank IDOR Transfer - Screenshot 5" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank sms broadcast.png6" alt="InsecureBank SMS Broadcast - Screenshot 6" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank exported activities.png7" alt="InsecureBank Exported Activities - Screenshot 7" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="insecurebank debuggable manifest.png8" alt="InsecureBank Debuggable Manifest - Screenshot 8" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <h3>Next Steps</h3>
+      <p>Static analysis is done — 18 issues found. Now moving to dynamic testing:</p>
+      <ul>
+        <li>Intercept all traffic with Burp</li>
+        <li>Exploit the BroadcastReceiver SMS leak</li>
+        <li>Confirm IDOR fund transfers work end-to-end</li>
+        <li>Demonstrate full account takeover chain</li>
+        <li>Extract & decrypt credentials via ADB backup</li>
+      </ul>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Mobile apps are often weaker than their backend APIs. Exported components, weak crypto, and insecure storage are low-hanging fruit. Always decompile the APK, hunt for hardcoded secrets, and test every exported component. InsecureBankv2 demonstrates that even "simple" mobile apps can have catastrophic security failures when basic mobile security principles are ignored.
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    <p>© 2025 techy-franky | <a href="index.html">Back to Portfolio</a></p>
+  </footer>
+
+</body>
+</html>
