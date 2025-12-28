@@ -352,6 +352,124 @@
       </div>
     </article>
 
+    <article class="writeup">
+      <h2>A03: Injection - SQL Injection Login Bypass</h2>
+      
+      <div>
+        <span class="tag">Injection</span>
+        <span class="tag">A03:2021</span>
+        <span class="tag">SQL Injection</span>
+        <span class="tag">Auth Bypass</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        SQL Injection (SQLi) is a perennial top risk in OWASP A03:2021 because user inputs get concatenated directly into database queries. In login forms, this often lets attackers bypass authentication entirely—no need for valid credentials.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "SQL injection vulnerability allowing login bypass" lab. The app has a simple username/password login tied to a backend database. Goal: Log in as the "administrator" user without knowing the password.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Accessed the login page and tested the username field with classic SQLi payloads.</li>
+        <li>Entered username: <code>administrator'--</code> (the <code>--</code> comments out the rest of the query). Left password blank or random.</li>
+        <li>Submitted—boom, logged in as administrator directly.</li>
+        <li><strong>Why it works:</strong> The query becomes something like <code>SELECT * FROM users WHERE username='administrator'--' AND password='whatever'</code>, so the password check gets ignored.</li>
+        <li>Alternative payloads tested: <code>administrator' OR '1'='1</code> (universal bypass) or <code>administrator'#</code> (MySQL-style comment).</li>
+        <li>Lab solved once the admin dashboard loaded.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="sql injection login bypass.png1" alt="SQL Injection Login Bypass - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="sql injection login bypass.png2" alt="SQL Injection Login Bypass - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Unauthenticated access to privileged accounts—attackers can take over admins, exfiltrate data, or pivot deeper. In real apps, this leads to massive breaches (think customer records dumped).
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Use parameterized/prepared statements (e.g., PDO in PHP, ? placeholders).</li>
+          <li>Input validation and escaping as a secondary layer (never primary).</li>
+          <li>Least privilege DB accounts and WAF rules for extra defense.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Login bypass is the low-hanging fruit of SQLi—always test auth forms first in a pentest. This lab reminded me how one missing quote in the code can hand over the keys to the kingdom. Parameterized queries aren't optional; they're mandatory.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A03 Example 2: Injection - SQL UNION Attack: Retrieving Data from Other Tables</h2>
+      
+      <div>
+        <span class="tag">Injection</span>
+        <span class="tag">A03:2021</span>
+        <span class="tag">SQL Injection</span>
+        <span class="tag">UNION Attack</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        SQL Injection with UNION attacks is one of the most powerful flavors of SQLi. It lets you combine your injected query with a legitimate one, pulling data from any table you can reach—as long as the column counts and data types match. Classic way to dump sensitive info like users, passwords, or credit cards.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "SQL injection UNION attack, retrieving data from other tables" lab. The app has a vulnerable "Products" category filter (e.g., <code>/filter?category=Gifts</code>). The goal is to extract the administrator's credentials from a hidden users table and log in.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Tested the category parameter with basic SQLi like <code>' ORDER BY 1--</code> to find the number of columns.</li>
+        <li>Kept increasing until error: Turned out to be 2 columns.</li>
+        <li>Tested data types with NULL: <code>' UNION SELECT NULL,NULL--</code> worked (both columns accept strings).</li>
+        <li>Dumped table names (Oracle DB in this lab): <code>' UNION SELECT table_name, NULL FROM all_tables--</code></li>
+        <li>Spotted the <code>users</code> table.</li>
+        <li>Dumped column names: <code>' UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name='USERS'--</code></li>
+        <li>Found <code>username</code> and <code>password</code>.</li>
+        <li>Extracted the data: <code>' UNION SELECT username, password FROM users--</code></li>
+        <li>Got administrator with a hashed password (cracked it offline or just pasted to log in).</li>
+        <li>Logged in as administrator—lab solved.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="sql union attack.png1" alt="SQL UNION Attack - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="sql union attack.png2" alt="SQL UNION Attack - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Game over for confidentiality. Attackers can exfiltrate entire databases—user creds, PII, financial data. Often leads to full system compromise when combined with other vulns.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Always use parameterized/prepared statements—UNION attacks die instantly.</li>
+          <li>Principle of least privilege: App DB user shouldn't have access to unrelated tables.</li>
+          <li>WAF or input filtering as defense-in-depth (but not a silver bullet).</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Column counting and type testing are muscle memory now—start every SQLi with ORDER BY and NULLs. This lab leveled up my data extraction game; dumping arbitrary tables feels like magic when it works. Also, real-world tip: Hashes are often crackable, so grab 'em whenever you can.
+      </div>
+    </article>
+
   </div>
 
   <footer>
