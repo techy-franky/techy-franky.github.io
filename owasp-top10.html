@@ -212,12 +212,6 @@
         <li>Lab solved instantly.</li>
       </ul>
 
-      <h3>Screenshots</h3>
-      <div style="margin: 20px 0;">
-        <img src="unprotected admin functionality.png1" alt="Unprotected Admin Functionality - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
-        <img src="unprotected admin functionality.png2" alt="Unprotected Admin Functionality - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
-      </div>
-
       <div class="impact-box">
         <h4>Impact</h4>
         <p>
@@ -237,6 +231,8 @@
       <div class="key-takeaway">
         <strong>Key Takeaway:</strong> Obscurity isn't security. Always hunt for hidden endpoints early in recon—robots.txt is a gift sometimes.
       </div>
+    </article>
+
     </article>
 
     <article class="writeup">
@@ -323,13 +319,6 @@
         <li>Hit the <code>/admin/delete?username=carlos</code> endpoint to solve the lab.</li>
       </ul>
       <p><em>Optional tools: JWT Editor BApp for fancier handling</em></p>
-
-      <h3>Screenshots</h3>
-      <div style="margin: 20px 0;">
-        <img src="jwt authentication bypass.png1" alt="JWT Authentication Bypass - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
-        <img src="jwt authentication bypass.png2" alt="JWT Authentication Bypass - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
-        <img src="jwt authentication bypass.png3" alt="JWT Authentication Bypass - Screenshot 3" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
-      </div>
 
       <div class="impact-box">
         <h4>Impact</h4>
@@ -581,75 +570,276 @@
       </div>
 
       <div class="key-takeaway">
-        <strong>Key Takeaway
-        :</strong> CORS reflection is sneaky because it looks "dynamic" but is actually wide open. Always test Origin reflection in pentests—add random domains and see if it bounces back. This lab showed how a tiny header misconfig can lead to credential exfil without any injection or XSS.
-</div>
-</article>
-<article class="writeup">
-  <h2>A06: Vulnerable and Outdated Components - Exploiting Java Deserialization with Apache Commons Collections</h2>
-  
-  <div>
-    <span class="tag">Vulnerable Components</span>
-    <span class="tag">A06:2021</span>
-    <span class="tag">Deserialization</span>
-    <span class="tag">RCE</span>
+        <strong>Key Takeaway:</strong> CORS reflection is sneaky because it looks "dynamic" but is actually wide open. Always test Origin reflection in pentests—add random domains and see if it bounces back. This lab showed how a tiny header misconfig can lead to credential exfil without any injection or XSS.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A06: Vulnerable and Outdated Components - Exploiting Java Deserialization with Apache Commons Collections</h2>
+      
+      <div>
+        <span class="tag">Vulnerable Components</span>
+        <span class="tag">A06:2021</span>
+        <span class="tag">Deserialization</span>
+        <span class="tag">RCE</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        OWASP A06:2021 (Vulnerable and Outdated Components) covers using old libraries with known exploits. Java deserialization is a classic example: when an app deserializes untrusted data (like session cookies) without proper checks, attackers can inject malicious objects that trigger "gadget chains" in libraries like Apache Commons Collections, leading to remote code execution (RCE).
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "Exploiting Java deserialization with Apache Commons" lab. The app uses a serialization-based session mechanism (cookie stores a serialized Java object) and loads an outdated/vulnerable version of Apache Commons Collections. Goal: Execute a command on the server to delete <code>/home/carlos/morale.txt</code> and solve the lab.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Logged in as <code>wiener:peter</code> in the lab app and proxied traffic with Burp Suite.</li>
+        <li>Noticed the session cookie starts with <code>rO0AB...</code> (classic base64-encoded Java serialized object—starts with <code>aced</code> in hex).</li>
+        <li>Confirmed deserialization vuln: The app deserializes this cookie without safe checks.</li>
+        <li>Used ysoserial (the go-to tool for gadget chains): Downloaded <code>ysoserial-all.jar</code>.</li>
+        <li>Generated payload targeting CommonsCollections4 (matches the lab's vulnerable lib).</li>
+        <li>For Java ≤15: <code>java -jar ysoserial-all.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64 -w 0</code></li>
+        <li>Copied the long base64 string output.</li>
+        <li>In Burp Repeater (on any request that sends the session cookie), replaced the original session value with the new malicious one.</li>
+        <li>URL-encoded the entire cookie value (right-click > Convert selection > URL > URL Encode All Characters).</li>
+        <li>Sent the request—server deserialized it, triggered the gadget chain, executed <code>rm /home/carlos/morale.txt</code>. Lab solved (even though you get a deserialization error in response—the command ran!).</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="java deserialization.png1" alt="Java Deserialization - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="java deserialization.png2" alt="Java Deserialization - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Remote code execution on the server—attackers can run arbitrary commands (shell, reverse shell, data exfil, ransomware, etc.). In real apps, this often leads to full server compromise, especially in microservices or legacy Java backends.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Avoid deserializing untrusted data entirely (use JSON/XML instead).</li>
+          <li>If you must: Use look-ahead deserialization (e.g., ObjectInputFilter in Java 9+), allow-lists for classes, or libraries like NotSoSerial.</li>
+          <li>Keep components updated—patch Apache Commons Collections (newer versions block gadget chains) or remove vulnerable ones.</li>
+          <li>Runtime protections: WAF rules for serialized patterns, container isolation.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> This lab is awesome for showing how "just using a library" can bite you hard. Gadget chains turn innocent deserialization into RCE without writing custom exploits—ysoserial makes it scarily easy. Always hunt for serialized blobs (base64 starting with rO0AB/aced) in cookies, headers, or params.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A07: Identification and Authentication Failures - Username Enumeration via Different Responses</h2>
+      
+      <div>
+        <span class="tag">Auth Failures</span>
+        <span class="tag">A07:2021</span>
+        <span class="tag">Username Enumeration</span>
+        <span class="tag">Brute Force</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        OWASP A07:2021 (Identification and Authentication Failures) includes issues where apps leak info about valid users through inconsistent responses. In this case, the login error messages differ slightly depending on whether the username exists—making it easy to enumerate valid accounts.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "Username enumeration via different responses" lab. The app has a standard login form. Goal: Identify a valid username from a provided wordlist, brute-force its password from another list, then log in and access the account page.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Proxied the login POST request in Burp Suite (usually to <code>/login</code>).</li>
+        <li>Used Burp Intruder: Loaded a wordlist of candidate usernames (provided in the lab) as payload position 1, fixed a dummy password like "password".</li>
+        <li>Attacked → Analyzed responses in Intruder table: Most gave "Invalid username" (short response), but one username returned a longer/different message like "Incorrect password" (or subtle length diff ~10-20 bytes).</li>
+        <li>Noted the valid username (e.g., "wiener" or whatever the lab gives).</li>
+        <li>New Intruder attack: Fixed the valid username, loaded password wordlist as payload position 2.</li>
+        <li>Attacked → Looked for the response without the error message (or 302 redirect instead of 200 with error).</li>
+        <li>Used the winning username + password combo to log in → accessed <code>/my-account</code>. Lab solved.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="username enumeration.png1" alt="Username Enumeration - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="username enumeration.png2" alt="Username Enumeration - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Attackers build a list of valid users quickly, then target them with credential stuffing, brute-force, or phishing. Makes other auth attacks way more effective.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Use generic error messages ("Invalid username or password") for both cases.</li>
+          <li>Add random delays or fixed response lengths to hide timing/length diffs.</li>
+          <li>Rate-limit login attempts globally or per IP.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Even tiny response differences (length, wording, timing) can leak info. Always normalize login responses in code. This lab is great for showing why "security through obscurity" fails—Burp Intruder makes enum trivial.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A08: Software and Data Integrity Failures - Web Cache Poisoning with Unkeyed Header</h2>
+      
+      <div>
+        <span class="tag">Integrity Failures</span>
+        <span class="tag">A08:2021</span>
+        <span class="tag">Cache Poisoning</span>
+        <span class="tag">XSS</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        A08 covers failures in integrity checks, including cache poisoning where unkeyed inputs (not part of the cache key) let attackers inject malicious content that gets cached and served to everyone.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "Web cache poisoning with an unkeyed header" lab. The app reflects an unkeyed header (like X-Forwarded-Host or similar) into page content without proper sanitization. Goal: Poison the cache so visiting users get an XSS payload (alert()).
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Proxied the homepage in Burp Suite.</li>
+        <li>Used Param Miner extension (or manual guessing) to find unkeyed headers—lab often uses something like <code>X-Forwarded-Host</code>.</li>
+        <li>In Repeater: Added a malicious header, e.g., <code>X-Forwarded-Host: attacker.com</code>, and injected XSS in a reflected spot (like <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> via the poisoned import or reflection).</li>
+        <li>Sent request, saw <code>X-Cache: miss</code> → then replayed until <code>X-Cache: hit</code> (cache poisoned).</li>
+        <li>Used a cache-buster (e.g., <code>?buster=123</code>) to test your own view without poisoning further.</li>
+        <li>Loaded the normal homepage in browser → alert() popped (victim simulation). Kept re-poisoning if needed until lab solved.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="cache poisoning.png1" alt="Web Cache Poisoning - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="cache poisoning.png2" alt="Web Cache Poisoning - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Mass XSS or defacement—poisoned responses served to all users hitting the cached page. Can steal cookies, phish, or deliver malware to thousands.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Include all user-controlled inputs that affect response in the cache key.</li>
+          <li>Sanitize/escape reflected headers.</li>
+          <li>Use short cache TTLs or Vary: on relevant headers.</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Caches are dumb—they key on what you tell them. Unkeyed headers are a huge red flag. This lab shows how obscure headers (X-Forwarded-*) can turn a cache into an attack delivery system. Super relevant for CDNs and modern apps.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A09: Security Logging and Monitoring Failures</h2>
+      
+      <div>
+        <span class="tag">Logging & Monitoring</span>
+        <span class="tag">A09:2021</span>
+        <span class="tag">Security Operations</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        This category is about insufficient logging, monitoring, or alerting, so attacks go undetected. No dedicated PortSwigger lab here, but in practice: Enable detailed logs (auth failures, input anomalies), use SIEM tools, and alert on suspicious patterns. It's often the reason breaches last weeks/months. Easy to overlook, but critical for incident response.
+      </p>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Awareness of the full OWASP Top 10—even the non-exploitable ones matter for mature security programs. Logging and monitoring are your last line of defense when prevention fails.
+      </div>
+    </article>
+
+    <article class="writeup">
+      <h2>A10: Server-Side Request Forgery (SSRF) - SSRF with Input-Based Filters</h2>
+      
+      <div>
+        <span class="tag">SSRF</span>
+        <span class="tag">A10:2021</span>
+        <span class="tag">Filter Bypass</span>
+      </div>
+
+      <h3>Overview</h3>
+      <p>
+        A10: SSRF lets attackers make the server request unintended resources. Here, input-based filters (blacklists/whitelists) block obvious localhost/127.0.0.1, but can be bypassed with tricks.
+      </p>
+
+      <h3>Lab Environment</h3>
+      <p>
+        PortSwigger Web Security Academy: "SSRF with input-based filters" (likely the blacklist-based one). The app has a stock checker that fetches URLs, but filters block localhost and /admin. Goal: Bypass to hit <code>http://localhost/admin</code> and delete user carlos.
+      </p>
+
+      <h3>Discovery & Exploitation</h3>
+      <ul>
+        <li>Proxied the stock check request (usually POST with <code>url=</code> param).</li>
+        <li>Tested basic SSRF: <code>url=http://localhost/admin</code> → blocked by filter.</li>
+        <li>Bypassed blacklist: Tried variations like:
+          <ul>
+            <li><code>http://127.0.0.1.xip.io</code> (resolves to 127.0.0.1)</li>
+            <li><code>http://127.1</code> (octal/shortened IP)</li>
+            <li><code>http://2130706433</code> (decimal IP for 127.0.0.1)</li>
+            <li><code>http://[::1]</code> (IPv6 localhost)</li>
+            <li><code>http://localhost%23@evil.com/</code> (URL parsing tricks)</li>
+          </ul>
+        </li>
+        <li>Common winner in labs: <code>http://127.0.0.1/admin</code> (sometimes filter misses case or path) or burpcollaborator for out-of-band confirmation.</li>
+        <li>Once bypassed, requested <code>http://localhost/admin/delete?username=carlos</code>.</li>
+        <li>Server fetched it → user deleted, lab solved.</li>
+      </ul>
+
+      <h3>Screenshots</h3>
+      <div style="margin: 20px 0;">
+        <img src="ssrf filter bypass.png1" alt="SSRF Filter Bypass - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
+        <img src="ssrf filter bypass.png2" alt="SSRF Filter Bypass - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
+      </div>
+
+      <div class="impact-box">
+        <h4>Impact</h4>
+        <p>
+          Internal network access—metadata exfil (cloud IMDS), port scanning, or pivoting to other services. Can lead to RCE or data theft from internal systems.
+        </p>
+      </div>
+
+      <div class="remediation-box">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Use strict whitelists (not blacklists).</li>
+          <li>Validate scheme/host/port fully.</li>
+          <li>Disable unnecessary protocols (no file://, dict://, etc.).</li>
+          <li>Use network-level controls (firewalls).</li>
+        </ul>
+      </div>
+
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Blacklists always lose—attackers have endless bypasses (IP formats, encodings, redirects). Whitelists or no SSRF at all is safer. This lab is perfect for showing filter evasion creativity.
+      </div>
+    </article>
+
   </div>
 
-  <h3>Overview</h3>
-  <p>
-    OWASP A06:2021 (Vulnerable and Outdated Components) covers using old libraries with known exploits. Java deserialization is a classic example: when an app deserializes untrusted data (like session cookies) without proper checks, attackers can inject malicious objects that trigger "gadget chains" in libraries like Apache Commons Collections, leading to remote code execution (RCE).
-  </p>
-
-  <h3>Lab Environment</h3>
-  <p>
-    PortSwigger Web Security Academy: "Exploiting Java deserialization with Apache Commons" lab. The app uses a serialization-based session mechanism (cookie stores a serialized Java object) and loads an outdated/vulnerable version of Apache Commons Collections. Goal: Execute a command on the server to delete <code>/home/carlos/morale.txt</code> and solve the lab.
-  </p>
-
-  <h3>Discovery & Exploitation</h3>
-  <ul>
-    <li>Logged in as <code>wiener:peter</code> in the lab app and proxied traffic with Burp Suite.</li>
-    <li>Noticed the session cookie starts with <code>rO0AB...</code> (classic base64-encoded Java serialized object—starts with <code>aced</code> in hex).</li>
-    <li>Confirmed deserialization vuln: The app deserializes this cookie without safe checks.</li>
-    <li>Used ysoserial (the go-to tool for gadget chains): Downloaded <code>ysoserial-all.jar</code>.</li>
-    <li>Generated payload targeting CommonsCollections4 (matches the lab's vulnerable lib).</li>
-    <li>For Java ≤15: <code>java -jar ysoserial-all.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64 -w 0</code></li>
-    <li>Copied the long base64 string output.</li>
-    <li>In Burp Repeater (on any request that sends the session cookie), replaced the original session value with the new malicious one.</li>
-    <li>URL-encoded the entire cookie value (right-click > Convert selection > URL > URL Encode All Characters).</li>
-    <li>Sent the request—server deserialized it, triggered the gadget chain, executed <code>rm /home/carlos/morale.txt</code>. Lab solved (even though you get a deserialization error in response—the command ran!).</li>
-  </ul>
-
-  <h3>Screenshots</h3>
-  <div style="margin: 20px 0;">
-    <img src="java deserialization.png1" alt="Java Deserialization - Screenshot 1" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px; margin-bottom: 15px;">
-    <img src="java deserialization.png2" alt="Java Deserialization - Screenshot 2" style="max-width: 100%; border: 1px solid #d0d7de; border-radius: 6px;">
-  </div>
-
-  <div class="impact-box">
-    <h4>Impact</h4>
-    <p>
-      Remote code execution on the server—attackers can run arbitrary commands (shell, reverse shell, data exfil, ransomware, etc.). In real apps, this often leads to full server compromise, especially in microservices or legacy Java backends.
-    </p>
-  </div>
-
-  <div class="remediation-box">
-    <h4>Remediation</h4>
-    <ul>
-      <li>Avoid deserializing untrusted data entirely (use JSON/XML instead).</li>
-      <li>If you must: Use look-ahead deserialization (e.g., ObjectInputFilter in Java 9+), allow-lists for classes, or libraries like NotSoSerial.</li>
-      <li>Keep components updated—patch Apache Commons Collections (newer versions block gadget chains) or remove vulnerable ones.</li>
-      <li>Runtime protections: WAF rules for serialized patterns, container isolation.</li>
-    </ul>
-  </div>
-
-  <div class="key-takeaway">
-    <strong>Key Takeaway:</strong> This lab is awesome for showing how "just using a library" can bite you hard. Gadget chains turn innocent deserialization into RCE without writing custom exploits—ysoserial makes it scarily easy. Always hunt for serialized blobs (base64 starting with rO0AB/aced) in cookies, headers, or params.
-  </div>
-</article>
-  </div>
   <footer>
     <p>© 2025 techy-franky | <a href="index.html">Back to Portfolio</a></p>
   </footer>
+
 </body>
 </html>
-```
